@@ -2,5 +2,7 @@
 *.d
 *.elf
 *.hex
+*.map
+*.lss
 build-*
 *.creator.user
