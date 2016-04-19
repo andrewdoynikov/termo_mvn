@@ -18,10 +18,7 @@
 // Сообщения начального запуска
 #define EVENT_SEARCH_SENSOR		100
 #define EVENT_PRINT_COUNT		101
-#define EVENT_PRINT_SENSOR_1	102
-#define EVENT_PRINT_SENSOR_2	103
-#define EVENT_PRINT_SENSOR_3	104
-#define EVENT_PRINT_SENSOR_4	105
+#define EVENT_RUN_MAIN			102
 //=============================================================================
 // Системные сообщения
 //=============================================================================

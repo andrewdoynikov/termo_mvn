@@ -3,9 +3,9 @@
 //=============================================================================
 #include "interface.h"
 //=============================================================================
-#define MAX_TASKS       10              // Количество задач
+#define MAX_TASKS       16              // Количество задач
 #define TIMER_COUNTER   TCNT2           // Регистр-счетчик
-#define TIMER_START     130             // Константа для таймера Т2
+#define TIMER_START     6               // Константа для таймера Т2
 #define TIMER_ISR       TIMER2_OVF_vect
 //Начальное состояние
 #define INITIAL_STATE   run_start

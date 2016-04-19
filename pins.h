@@ -45,7 +45,7 @@
 #define BEEPER_OFF()		PORT(BEEPER) &= ~(BEEPER_LINE)
 #define BEEPER_ON()			PORT(BEEPER) |= (BEEPER_LINE)
 #define BEEPER_init()		DDR(BEEPER) |= (BEEPER_LINE); BEEPER_OFF();
-#define BEEPER_TICK()		BEEPER_ON(); _delay_ms(3); BEEPER_OFF();
+#define BEEPER_TICK()		BEEPER_ON(); _delay_ms(10); BEEPER_OFF();
 #define BEEPER_TICK_LONG()	BEEPER_ON(); _delay_ms(80); BEEPER_OFF();
 //=============================================================================
 // Кнопки

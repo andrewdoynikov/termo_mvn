@@ -207,7 +207,7 @@ void MAX7219_printNum(uint8_t pos, signed int x, unsigned char n, unsigned char 
 void MAX7219_printChar(uint8_t pos, char data)
 {
   if (pos < 9) {
-    buffer_display[pos - 1] = data;
+    buffer_display[pos - 1] = MAX7219_lookupCode(data);
     MAX7219_updateDisplay();
   }
 }

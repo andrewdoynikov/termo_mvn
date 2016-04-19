@@ -39,7 +39,6 @@ int main(void)
   }
 #endif
   sei();
-  BEEPER_TICK();
   while(1) {
     RTOS_dispatchTask();        
   }

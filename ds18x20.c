@@ -49,6 +49,7 @@ uint8_t ds18x20IsOnBus(uint8_t chanel)
     break;
   }
   _delay_us(410);
+  devCount[chanel - 1] = ret;
   sei();
   return ret;
 }
@@ -148,7 +149,6 @@ static uint8_t ds18x20GetBit(uint8_t chanel)
       _delay_us(55);
     break;
   }
-  devCount[chanel - 1] = ret;
   sei();
   return ret;
 }
@@ -240,5 +240,10 @@ int16_t ds18x20GetTemp(uint8_t chanel)
 uint8_t ds18x20GetDevCount(uint8_t chanel)
 {
   return devCount[chanel - 1];
+}
+//=============================================================================
+void ds18x20SetDevCount(uint8_t chanel, uint8_t val)
+{
+  devCount[chanel - 1] = val;
 }
 //=============================================================================

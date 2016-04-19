@@ -40,6 +40,7 @@ void ds18x20SendByte(uint8_t byte, uint8_t chanel);
 uint8_t ds18x20GetByte(uint8_t chanel);
 int16_t ds18x20GetTemp(uint8_t chanel);
 uint8_t ds18x20GetDevCount(uint8_t chanel);
+void ds18x20SetDevCount(uint8_t chanel, uint8_t val);
 void ds18x20ConvertTemp(uint8_t chanel);
 void ds18x20GetAllTemps(void);
 //=============================================================================
