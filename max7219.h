@@ -27,6 +27,7 @@ void MAX7219_clearDisplay(void);
 void MAX7219_updateDisplay(void);
 void MAX7219_printNum(uint8_t pos, signed int x, unsigned char n, unsigned char fillch);
 void MAX7219_printStr(uint8_t pos, char *data);
+void MAX7219_printChar(uint8_t pos, char data);
 char MAX7219_lookupCode(char character);
 void MAX7219_setCommaPos(uint8_t pos, uint8_t comma);
 //=============================================================================

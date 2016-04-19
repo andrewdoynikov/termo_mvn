@@ -204,6 +204,14 @@ void MAX7219_printNum(uint8_t pos, signed int x, unsigned char n, unsigned char 
   MAX7219_updateDisplay();
 }
 //=============================================================================
+void MAX7219_printChar(uint8_t pos, char data)
+{
+  if (pos < 9) {
+    buffer_display[pos - 1] = data;
+    MAX7219_updateDisplay();
+  }
+}
+//=============================================================================
 void MAX7219_printStr(uint8_t pos, char *data)
 {
   unsigned char i = pos;

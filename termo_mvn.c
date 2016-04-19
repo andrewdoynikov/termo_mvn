@@ -10,7 +10,7 @@
 #include "interface.h"
 #include "kbd.h"
 #include "max7219.h"
-
+//=============================================================================
 #define	DEBUG	0
 //=============================================================================
 int main(void)
@@ -21,8 +21,9 @@ int main(void)
   OUT_2_init();
   BEEPER_init();
   RTOS_init();
-  RTOS_setTask(EVENT_TIMER_SECOND, 0, 500); // запускаем секундный таймер,
-  RTOS_setTask(EVENT_KEY_POLL, 0, 10);      // запускаем секундный таймер,
+  RTOS_setTask(EVENT_TIMER_SECOND, 0, 1000); // запускаем секундный таймер,
+  RTOS_setTask(EVENT_KEY_POLL, 0, 10);       // запускаем сканирование клавиатуры
+  RTOS_setTask(EVENT_SEARCH_SENSOR, 0, 0);   // запускаем сканирование сенсоров
 
 #if (DEBUG == 1)
   while(1) {

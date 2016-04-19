@@ -35,10 +35,12 @@ typedef union {
   };
 } ds18x20Dev;
 //=============================================================================
-void ds18x20SearchDevices(void);
-uint8_t ds18x20Process(void);
-int16_t ds18x20GetTemp(uint8_t num);
-uint8_t ds18x20GetDevCount(void);
-uint8_t ds18x20GetAddress(uint8_t num, uint8_t c);
+uint8_t ds18x20IsOnBus(uint8_t chanel);
+void ds18x20SendByte(uint8_t byte, uint8_t chanel);
+uint8_t ds18x20GetByte(uint8_t chanel);
+int16_t ds18x20GetTemp(uint8_t chanel);
+uint8_t ds18x20GetDevCount(uint8_t chanel);
+void ds18x20ConvertTemp(uint8_t chanel);
+void ds18x20GetAllTemps(void);
 //=============================================================================
 #endif /* DS18X20_H */
