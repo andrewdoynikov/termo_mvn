@@ -24,13 +24,13 @@
 //=============================================================================
 #define DS18X20_MAX_DEV				4
 #define DS18X20_SCRATCH_LEN			9
+#define DS18X20_SCRATCH_TEMP_LEN	2
 #define DS18X20_ID_LEN				8
 //=============================================================================
 typedef union {
   int16_t temp;
-  uint8_t port;
   struct {
-	uint8_t sp[DS18X20_SCRATCH_LEN];
+	uint8_t sp[DS18X20_SCRATCH_TEMP_LEN];
 	uint8_t id[DS18X20_ID_LEN];
   };
 } ds18x20Dev;
@@ -42,6 +42,6 @@ int16_t ds18x20GetTemp(uint8_t chanel);
 uint8_t ds18x20GetDevCount(uint8_t chanel);
 void ds18x20SetDevCount(uint8_t chanel, uint8_t val);
 void ds18x20ConvertTemp(uint8_t chanel);
-void ds18x20GetAllTemps(void);
+void ds18x20ReadStratchPad(uint8_t chanel);
 //=============================================================================
 #endif /* DS18X20_H */

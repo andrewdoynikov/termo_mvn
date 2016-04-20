@@ -177,15 +177,10 @@ void MAX7219_clearDisplay(void)
   MAX7219_updateDisplay();
 }
 //=============================================================================
-void MAX7219_printNum(uint8_t pos, signed int x, unsigned char n, unsigned char fillch)
+void MAX7219_printNum(uint8_t pos, uint16_t x, unsigned char n, unsigned char fillch)
 {
-  char negative = 0;
   unsigned char i;
   unsigned char s[4];
-  if (x < 0) {
-    negative = 1;
-    x *= -1;
-  }
   for (i = 0; i < n; i++) {
     s[n - i - 1] = '0' + (x % 10);
     x /= 10;
@@ -197,9 +192,6 @@ void MAX7219_printNum(uint8_t pos, signed int x, unsigned char n, unsigned char 
     if ((pos + i) < 8) {
       buffer_display[pos + i] = MAX7219_lookupCode(s[i]);
     }
-  }
-  if (negative) {
-    buffer_display[pos - 1] = MAX7219_lookupCode('-');
   }
   MAX7219_updateDisplay();
 }

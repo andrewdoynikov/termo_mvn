@@ -174,25 +174,22 @@ uint8_t ds18x20GetByte(uint8_t chanel)
   return ret;
 }
 //=============================================================================
-void ds18x20GetAllTemps(void)
+void ds18x20ReadStratchPad(uint8_t chanel)
 {
-  uint8_t i, j;
+  uint8_t j;
   uint8_t crc;
   static uint8_t arr[DS18X20_SCRATCH_LEN];
-  for (i = 0; i < DS18X20_MAX_DEV - 1; i++)
+  if (ds18x20IsOnBus(chanel))
   {
-	if (ds18x20IsOnBus(i + 1))
-	{
-	  ds18x20SendByte(DS18X20_CMD_READ_SCRATCH, i + 1);
-  	  crc = 0;
-	  for (j = 0; j < DS18X20_SCRATCH_LEN; j++) {
-		arr[j] = ds18x20GetByte(i + 1);
-		crc = _crc_ibutton_update(crc, arr[j]);
-	  }
-  	  if (crc == 0)
-	  {
-		for (j = 0; j < DS18X20_SCRATCH_LEN; j++)  devs[i].sp[j] = arr[j];
-	  }
+    ds18x20SendByte(DS18X20_CMD_SKIP_ROM, chanel);
+    ds18x20SendByte(DS18X20_CMD_READ_SCRATCH, chanel);
+    crc = 0;
+	for (j = 0; j < DS18X20_SCRATCH_LEN; j++) {
+	  arr[j] = ds18x20GetByte(chanel);
+	  crc = _crc_ibutton_update(crc, arr[j]);
+	}
+  	if (crc == 0) {
+	  for (j = 0; j < DS18X20_SCRATCH_TEMP_LEN; j++) { devs[chanel - 1].sp[j] = arr[j]; }
 	}
   }
   return;
@@ -200,8 +197,11 @@ void ds18x20GetAllTemps(void)
 //=============================================================================
 void ds18x20ConvertTemp(uint8_t chanel)
 {
-  ds18x20SendByte(DS18X20_CMD_SKIP_ROM, chanel);
-  ds18x20SendByte(DS18X20_CMD_CONVERT, chanel);
+  if (ds18x20IsOnBus(chanel))
+  {
+    ds18x20SendByte(DS18X20_CMD_SKIP_ROM, chanel);
+    ds18x20SendByte(DS18X20_CMD_CONVERT, chanel);
+  }
 #ifdef DS18X20_PARASITE_POWER
   /* Set active 1 on port for at least 750ms as parasitic power */
   switch(chanel) {
