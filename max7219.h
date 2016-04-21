@@ -25,7 +25,7 @@ void MAX7219_SendCmd(uint8_t reg, uint8_t data);
 void MAX7219_Init(void);
 void MAX7219_clearDisplay(void);
 void MAX7219_updateDisplay(void);
-void MAX7219_printNum(uint8_t pos, uint16_t x, unsigned char n, unsigned char fillch);
+void MAX7219_printNum(uint8_t pos, int16_t x, unsigned char n, unsigned char fillch);
 void MAX7219_printStr(uint8_t pos, char *data);
 void MAX7219_printChar(uint8_t pos, char data);
 char MAX7219_lookupCode(char character);

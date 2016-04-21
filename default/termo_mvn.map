@@ -1,15 +1,15 @@
 Archive member included because of file (symbol)
 
-c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
-                              max7219.o (__udivmodhi4)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
-                              ds18x20.o (__divmodhi4)
+                              max7219.o (__divmodhi4)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
                               c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm328p.o (exit)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
                               interface.o (__do_copy_data)
 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
                               interface.o (__do_clear_bss)
+c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
+                              c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o) (__udivmodhi4)
 
 Memory Configuration
 
@@ -126,7 +126,7 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0xf1c
+.text           0x00000000      0xf74
  *(.vectors)
  .vectors       0x00000000       0x68 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm328p.o
                 0x00000000                __vector_default
@@ -209,63 +209,63 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
                 0x000000a2                __vector_20
  .text          0x000000a6       0x4a termo_mvn.o
                 0x000000a6                main
- .text          0x000000f0      0x346 interface.o
+ .text          0x000000f0      0x34e interface.o
                 0x000000f0                print_temperature
                 0x0000012c                events_default
                 0x0000014a                run_menu
                 0x0000016a                run_main
-                0x00000282                run_start
- .text          0x00000436      0x27c kbd.o
-                0x000004f4                KBD_getBut
-                0x0000051e                KBD_init
-                0x00000570                KBD_poll
-                0x00000596                KBD_scan
- .text          0x000006b2      0x252 rtos.o
-                0x000006b2                RTOS_init
-                0x000006d6                RTOS_setTask
-                0x000007bc                RTOS_deleteTask
-                0x00000826                RTOS_dispatchTask
-                0x000008e0                __vector_9
- .text          0x00000904      0x244 max7219.o
-                0x00000904                MAX7219_lookupCode
-                0x0000091a                MAX7219_SendByte
-                0x00000938                MAX7219_SendCmd
-                0x00000960                MAX7219_updateDisplay
-                0x00000990                MAX7219_clearDisplay
-                0x000009b6                MAX7219_Init
-                0x000009f0                MAX7219_printNum
-                0x00000ac4                MAX7219_printChar
-                0x00000ae4                MAX7219_printStr
-                0x00000b26                MAX7219_setCommaPos
- .text          0x00000b48      0x382 ds18x20.o
-                0x00000b48                ds18x20IsOnBus
-                0x00000c22                ds18x20SendByte
-                0x00000ce8                ds18x20GetByte
-                0x00000d90                ds18x20ReadStratchPad
-                0x00000e10                ds18x20ConvertTemp
-                0x00000e5e                ds18x20GetTemp
-                0x00000eb2                ds18x20GetDevCount
-                0x00000ebe                ds18x20SetDevCount
- .text          0x00000eca        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
- .text          0x00000eca        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
- .text          0x00000eca        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text          0x00000eca        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text          0x00000eca        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
-                0x00000eca                . = ALIGN (0x2)
+                0x0000028a                run_start
+ .text          0x0000043e      0x27c kbd.o
+                0x000004fc                KBD_getBut
+                0x00000526                KBD_init
+                0x00000578                KBD_poll
+                0x0000059e                KBD_scan
+ .text          0x000006ba      0x252 rtos.o
+                0x000006ba                RTOS_init
+                0x000006de                RTOS_setTask
+                0x000007c4                RTOS_deleteTask
+                0x0000082e                RTOS_dispatchTask
+                0x000008e8                __vector_9
+ .text          0x0000090c      0x278 max7219.o
+                0x0000090c                MAX7219_lookupCode
+                0x00000922                MAX7219_SendByte
+                0x00000940                MAX7219_SendCmd
+                0x00000968                MAX7219_updateDisplay
+                0x00000998                MAX7219_clearDisplay
+                0x000009be                MAX7219_Init
+                0x000009f8                MAX7219_printNum
+                0x00000b00                MAX7219_printChar
+                0x00000b20                MAX7219_printStr
+                0x00000b62                MAX7219_setCommaPos
+ .text          0x00000b84      0x39e ds18x20.o
+                0x00000b84                ds18x20IsOnBus
+                0x00000c5e                ds18x20SendByte
+                0x00000d24                ds18x20GetByte
+                0x00000dcc                ds18x20ReadStratchPad
+                0x00000e4c                ds18x20ConvertTemp
+                0x00000e9a                ds18x20GetTemp
+                0x00000f0a                ds18x20GetDevCount
+                0x00000f16                ds18x20SetDevCount
+ .text          0x00000f22        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
+ .text          0x00000f22        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text          0x00000f22        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text          0x00000f22        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .text          0x00000f22        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
+                0x00000f22                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x00000eca       0x28 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
-                0x00000eca                __udivmodhi4
- .text.libgcc   0x00000ef2       0x26 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
-                0x00000ef2                _div
-                0x00000ef2                __divmodhi4
- .text.libgcc   0x00000f18        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x00000f18        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x00000f18        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
-                0x00000f18                . = ALIGN (0x2)
+ .text.libgcc   0x00000f22       0x26 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
+                0x00000f22                _div
+                0x00000f22                __divmodhi4
+ .text.libgcc   0x00000f48        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00000f48        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00000f48        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000f48       0x28 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
+                0x00000f48                __udivmodhi4
+                0x00000f70                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000f18        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
-                0x00000f18                _exit
-                0x00000f18                exit
+ .fini9         0x00000f70        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+                0x00000f70                _exit
+                0x00000f70                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -284,34 +284,33 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000f18        0x4 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000f70        0x4 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000f1c                _etext = .
+                0x00000f74                _etext = .
 
-.data           0x00800100       0x6c load address 0x00000f1c
+.data           0x00800100       0x6c load address 0x00000f74
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm328p.o
  .data          0x00800100        0x0 termo_mvn.o
- .data          0x00800100        0x3 interface.o
- .data          0x00800103        0x0 kbd.o
- .data          0x00800103        0x2 rtos.o
-                0x00800103                pState
- .data          0x00800105       0x66 max7219.o
-                0x00800105                digit_pin
-                0x0080010d                buffer_display
- .data          0x0080016b        0x0 ds18x20.o
- .data          0x0080016b        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
- .data          0x0080016b        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
- .data          0x0080016b        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .data          0x0080016b        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .data          0x0080016b        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .data          0x00800100        0x4 interface.o
+ .data          0x00800104        0x0 kbd.o
+ .data          0x00800104        0x2 rtos.o
+                0x00800104                pState
+ .data          0x00800106       0x66 max7219.o
+                0x00800106                digit_pin
+                0x0080010e                buffer_display
+ .data          0x0080016c        0x0 ds18x20.o
+ .data          0x0080016c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
+ .data          0x0080016c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .data          0x0080016c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .data          0x0080016c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .data          0x0080016c        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
  *(.data*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.d*)
                 0x0080016c                . = ALIGN (0x2)
- *fill*         0x0080016b        0x1 00
                 0x0080016c                _edata = .
                 0x0080016c                PROVIDE (__data_end, .)
 
@@ -328,16 +327,16 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
                 0x00800180                timerInterrupt
  .bss           0x008001e2        0x0 max7219.o
  .bss           0x008001e2       0x35 ds18x20.o
- .bss           0x00800217        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
  .bss           0x00800217        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
  .bss           0x00800217        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
  .bss           0x00800217        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
  .bss           0x00800217        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .bss           0x00800217        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
  *(.bss*)
  *(COMMON)
                 0x00800217                PROVIDE (__bss_end, .)
-                0x00000f1c                __data_load_start = LOADADDR (.data)
-                0x00000f88                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000f74                __data_load_start = LOADADDR (.data)
+                0x00000fe0                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800217        0x0
                 0x00800217                PROVIDE (__noinit_start, .)
@@ -428,33 +427,33 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
  .debug_pubnames
                 0x00000274       0xbe ds18x20.o
 
-.debug_info     0x00000000     0x1829
+.debug_info     0x00000000     0x1872
  *(.debug_info)
  .debug_info    0x00000000       0x90 termo_mvn.o
- .debug_info    0x00000090      0x1be interface.o
- .debug_info    0x0000024e      0x52b kbd.o
- .debug_info    0x00000779      0x232 rtos.o
- .debug_info    0x000009ab      0x318 max7219.o
- .debug_info    0x00000cc3      0xb66 ds18x20.o
+ .debug_info    0x00000090      0x1cf interface.o
+ .debug_info    0x0000025f      0x52b kbd.o
+ .debug_info    0x0000078a      0x232 rtos.o
+ .debug_info    0x000009bc      0x327 max7219.o
+ .debug_info    0x00000ce3      0xb8f ds18x20.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev   0x00000000      0x752
+.debug_abbrev   0x00000000      0x772
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x4e termo_mvn.o
- .debug_abbrev  0x0000004e       0xb6 interface.o
- .debug_abbrev  0x00000104      0x1e0 kbd.o
- .debug_abbrev  0x000002e4      0x12f rtos.o
- .debug_abbrev  0x00000413       0xf5 max7219.o
- .debug_abbrev  0x00000508      0x24a ds18x20.o
+ .debug_abbrev  0x0000004e       0xc5 interface.o
+ .debug_abbrev  0x00000113      0x1e0 kbd.o
+ .debug_abbrev  0x000002f3      0x12f rtos.o
+ .debug_abbrev  0x00000422      0x104 max7219.o
+ .debug_abbrev  0x00000526      0x24c ds18x20.o
 
-.debug_line     0x00000000     0x174f
+.debug_line     0x00000000     0x17b7
  *(.debug_line)
  .debug_line    0x00000000      0x122 termo_mvn.o
- .debug_line    0x00000122      0x3c2 interface.o
- .debug_line    0x000004e4      0x508 kbd.o
- .debug_line    0x000009ec      0x2c9 rtos.o
- .debug_line    0x00000cb5      0x36a max7219.o
- .debug_line    0x0000101f      0x730 ds18x20.o
+ .debug_line    0x00000122      0x3e2 interface.o
+ .debug_line    0x00000504      0x508 kbd.o
+ .debug_line    0x00000a0c      0x2c9 rtos.o
+ .debug_line    0x00000cd5      0x3a2 max7219.o
+ .debug_line    0x00001077      0x740 ds18x20.o
 
 .debug_frame    0x00000000      0x290
  *(.debug_frame)
@@ -465,28 +464,28 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
  .debug_frame   0x00000150       0xb0 max7219.o
  .debug_frame   0x00000200       0x90 ds18x20.o
 
-.debug_str      0x00000000      0x472
+.debug_str      0x00000000      0x47e
  *(.debug_str)
  .debug_str     0x00000000       0x77 termo_mvn.o
                                  0xb0 (size before relaxing)
- .debug_str     0x00000077       0x72 interface.o
-                                0x102 (size before relaxing)
- .debug_str     0x000000e9       0xeb kbd.o
+ .debug_str     0x00000077       0x79 interface.o
+                                0x109 (size before relaxing)
+ .debug_str     0x000000f0       0xeb kbd.o
                                 0x187 (size before relaxing)
- .debug_str     0x000001d4       0x98 rtos.o
+ .debug_str     0x000001db       0x98 rtos.o
                                 0x13a (size before relaxing)
- .debug_str     0x0000026c       0xf1 max7219.o
-                                0x1a0 (size before relaxing)
- .debug_str     0x0000035d      0x115 ds18x20.o
-                                0x200 (size before relaxing)
+ .debug_str     0x00000273       0xf1 max7219.o
+                                0x1a4 (size before relaxing)
+ .debug_str     0x00000364      0x11a ds18x20.o
+                                0x210 (size before relaxing)
 
-.debug_loc      0x00000000     0x143a
+.debug_loc      0x00000000     0x14d6
  *(.debug_loc)
- .debug_loc     0x00000000      0x137 interface.o
- .debug_loc     0x00000137      0x527 kbd.o
- .debug_loc     0x0000065e      0x12b rtos.o
- .debug_loc     0x00000789      0x2f3 max7219.o
- .debug_loc     0x00000a7c      0x9be ds18x20.o
+ .debug_loc     0x00000000      0x12c interface.o
+ .debug_loc     0x0000012c      0x527 kbd.o
+ .debug_loc     0x00000653      0x12b rtos.o
+ .debug_loc     0x0000077e      0x355 max7219.o
+ .debug_loc     0x00000ad3      0xa03 ds18x20.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -494,7 +493,7 @@ OUTPUT(termo_mvn.elf elf32-avr)
 LOAD linker stubs
 
 .debug_pubtypes
-                0x00000000      0x115
+                0x00000000      0x121
  .debug_pubtypes
                 0x00000000       0x1e termo_mvn.o
  .debug_pubtypes
@@ -504,6 +503,6 @@ LOAD linker stubs
  .debug_pubtypes
                 0x00000074       0x30 rtos.o
  .debug_pubtypes
-                0x000000a4       0x2b max7219.o
+                0x000000a4       0x2a max7219.o
  .debug_pubtypes
-                0x000000cf       0x46 ds18x20.o
+                0x000000ce       0x53 ds18x20.o

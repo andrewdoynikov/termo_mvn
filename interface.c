@@ -69,7 +69,7 @@ void run_start(unsigned char event)
     case EVENT_RUN_MAIN:
       MAX7219_clearDisplay();
       SET_STATE(run_main);
-      RTOS_setTask(EVENT_SHOW_TEMP_1, 0, 0);
+      RTOS_setTask(EVENT_START_CONVERTIONS, 0, 0);
     break;
 	default:
 	  events_default(event);
@@ -79,38 +79,35 @@ void run_start(unsigned char event)
 //=============================================================================
 void run_main(unsigned char event)
 {
+  static uint8_t chanel = 1;
   switch(event) {
+    case EVENT_START_CONVERTIONS:
+	  if (ds18x20GetDevCount(1) == 1) { ds18x20ConvertTemp(1); }
+	  if (ds18x20GetDevCount(2) == 1) { ds18x20ConvertTemp(2); }
+	  if (ds18x20GetDevCount(3) == 1) { ds18x20ConvertTemp(3); }
+	  if (ds18x20GetDevCount(4) == 1) { ds18x20ConvertTemp(4); }
+      RTOS_setTask(EVENT_SHOW_TEMP_1, 0, 0);
+    break;
     case EVENT_SHOW_TEMP_1:
 	  MAX7219_printChar(2, 'd');
 	  MAX7219_printChar(3, '-');
-	  MAX7219_printChar(4, '1');
-      print_temperature(5, ds18x20GetTemp(1));
+	  MAX7219_printChar(4, 0x30 + chanel);
+      print_temperature(5, ds18x20GetTemp(chanel));
       MAX7219_setCommaPos(7,1);
-      RTOS_setTask(EVENT_SHOW_TEMP_2, 1000, 0);
+	  if (chanel < 4) {
+	    chanel++; 
+        RTOS_setTask(EVENT_SHOW_TEMP_1, SHOW_TIME, 0);
+	  } else { 
+	    chanel = 1;
+        RTOS_setTask(EVENT_GET_TEMPERATURE, SHOW_TIME, 0);
+	  }
     break;
-    case EVENT_SHOW_TEMP_2:
-	  MAX7219_printChar(2, 'd');
-	  MAX7219_printChar(3, '-');
-	  MAX7219_printChar(4, '2');
-      print_temperature(5, ds18x20GetTemp(2));
-      MAX7219_setCommaPos(7,1);
-      RTOS_setTask(EVENT_SHOW_TEMP_3, 1000, 0);
-    break;
-    case EVENT_SHOW_TEMP_3:
-	  MAX7219_printChar(2, 'd');
-	  MAX7219_printChar(3, '-');
-	  MAX7219_printChar(4, '3');
-      print_temperature(5, ds18x20GetTemp(3));
-      MAX7219_setCommaPos(7,1);
-      RTOS_setTask(EVENT_SHOW_TEMP_4, 1000, 0);
-    break;
-    case EVENT_SHOW_TEMP_4:
-	  MAX7219_printChar(2, 'd');
-	  MAX7219_printChar(3, '-');
-	  MAX7219_printChar(4, '4');
-      print_temperature(5, ds18x20GetTemp(4));
-      MAX7219_setCommaPos(7,1);
-      RTOS_setTask(EVENT_SHOW_TEMP_1, 1000, 0);
+    case EVENT_GET_TEMPERATURE:
+	  if (ds18x20GetDevCount(1) == 1) { ds18x20ReadStratchPad(1); }
+	  if (ds18x20GetDevCount(2) == 1) { ds18x20ReadStratchPad(2); }
+	  if (ds18x20GetDevCount(3) == 1) { ds18x20ReadStratchPad(3); }
+	  if (ds18x20GetDevCount(4) == 1) { ds18x20ReadStratchPad(4); }
+      RTOS_setTask(EVENT_START_CONVERTIONS, 50, 0);
     break;
     case EVENT_KEY_PLUS:
     case EVENT_KEY_PLUS_LONG:

@@ -154,7 +154,7 @@ void MAX7219_Init(void)
   MAX7219_SendCmd(MAX7219_SHUTDOWN, 1);
   MAX7219_SendCmd(MAX7219_DISP_TEST, 0);
   MAX7219_SendCmd(MAX7219_DEC_MODE, 0);
-  MAX7219_SendCmd(MAX7219_INTENSITY, 4);
+  MAX7219_SendCmd(MAX7219_INTENSITY, 2);
   MAX7219_SendCmd(MAX7219_SCAN_LIMIT, 7);
   MAX7219_clearDisplay();
   return;
@@ -177,10 +177,14 @@ void MAX7219_clearDisplay(void)
   MAX7219_updateDisplay();
 }
 //=============================================================================
-void MAX7219_printNum(uint8_t pos, uint16_t x, unsigned char n, unsigned char fillch)
+void MAX7219_printNum(uint8_t pos, int16_t x, unsigned char n, unsigned char fillch)
 {
-  unsigned char i;
+  unsigned char i, sign = 0;
   unsigned char s[4];
+  if (x < 0) {
+    sign = 1;
+    x *= -1;
+  }
   for (i = 0; i < n; i++) {
     s[n - i - 1] = '0' + (x % 10);
     x /= 10;
@@ -192,6 +196,9 @@ void MAX7219_printNum(uint8_t pos, uint16_t x, unsigned char n, unsigned char fi
     if ((pos + i) < 8) {
       buffer_display[pos + i] = MAX7219_lookupCode(s[i]);
     }
+  }
+  if (sign) {
+    buffer_display[pos - 1] = MAX7219_lookupCode('-');
   }
   MAX7219_updateDisplay();
 }

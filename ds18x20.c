@@ -228,12 +228,14 @@ void ds18x20ConvertTemp(uint8_t chanel)
 //=============================================================================
 int16_t ds18x20GetTemp(uint8_t chanel)
 {
-  int16_t ret = devs[chanel - 1].temp;
-  if (devs[chanel - 1].id[0] == 0x28) /* DS18B20 */
-	ret = ret * 5 / 8;
-  else if (devs[chanel - 1].id[0] == 0x10) /* DS18S20 */
-	ret = ret * 5;
-	/* Return value is in 0.1В°C units */
+  int16_t ret;
+  uint16_t tmp_L = devs[chanel - 1].sp[0], tmp_H = devs[chanel - 1].sp[1];
+  int16_t tmp = 0;
+  ret = ((tmp_H << 8) | tmp_L);
+  tmp = (tmp_L & 15);
+  tmp = (tmp << 1) + (tmp << 3); // Умножаем на 10
+  tmp = (tmp >> 4);              //делим на 16 или умножаем на 0.0625  
+  ret = (ret / 16 * 10) + tmp;
   return ret;
 }
 //=============================================================================
