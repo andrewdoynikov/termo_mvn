@@ -17,19 +17,16 @@
 //=============================================================================
 // Сообщения начального запуска
 #define EVENT_SEARCH_SENSOR		100
-#define EVENT_PRINT_COUNT		101
 #define EVENT_RUN_MAIN			102
 #define EVENT_START_CONVERTIONS	103
 #define EVENT_GET_TEMPERATURE	104
-#define EVENT_SHOW_TEMP_1		105
-#define EVENT_SHOW_TEMP_2		106
-#define EVENT_SHOW_TEMP_3		107
-#define EVENT_SHOW_TEMP_4		108
+#define EVENT_SHOW_SENSOR		105
 //=============================================================================
 // Системные сообщения
 //=============================================================================
 #define EVENT_KEY_POLL     		200
 #define EVENT_TIMER_SECOND		201
 #define EVENT_TIMER_SAVE		202
+#define EVENT_SCAN_SENSOR		203
 //=============================================================================
 #endif // EVENT_LIST_H
