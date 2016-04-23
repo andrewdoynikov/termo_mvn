@@ -247,72 +247,64 @@ void DS18x20_scan(void)
   }
 }
 //=============================================================================
-void save_max_temp_1(int16_t temp)
+void save_max_temp_1(uint16_t temp)
 {
-  eeprom_write_byte((uint8_t*)MAX_TEMP_1_ADDR, ((temp & 0xF0) >> 8));
-  eeprom_write_byte((uint8_t*)MAX_TEMP_1_ADDR + 1, (temp & 0x0F));
+  eeprom_write_word((uint16_t*)MAX_TEMP_1_ADDR, temp);
 }
 //=============================================================================
-int16_t load_max_temp1(void)
+void save_max_temp_2(uint16_t temp)
 {
-  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_1_ADDR);
-  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_1_ADDR + 1);
-  uint16_t t = th;
-  t = (t << 8) + tl;
-  if (t > 800) t = 250;
-  temps[0][0] = (int16_t)t;
-  return (int16_t)t;
+  eeprom_write_word((uint16_t*)MAX_TEMP_2_ADDR, temp);
 }
 //=============================================================================
-void save_max_temp_2(int16_t temp)
+void save_min_temp_1(uint16_t temp)
 {
-  eeprom_write_byte((uint8_t*)MAX_TEMP_2_ADDR, ((temp & 0xF0) >> 8));
-  eeprom_write_byte((uint8_t*)MAX_TEMP_2_ADDR + 1, (temp & 0x0F));
+  eeprom_write_word((uint16_t*)MIN_TEMP_1_ADDR, temp);
 }
 //=============================================================================
-int16_t load_max_temp2(void)
+void save_min_temp_2(uint16_t temp)
 {
-  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_2_ADDR);
-  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_2_ADDR + 1);
-  uint16_t t = th;
-  t = (t << 8) + tl;
-  if (t > 800) t = 250;
-  temps[1][0] = (int16_t)t;
-  return (int16_t)t;
+  eeprom_write_word((uint16_t*)MIN_TEMP_2_ADDR, temp);
 }
 //=============================================================================
-void save_min_temp_1(int16_t temp)
+int16_t load_max_temp_1(void)
 {
-  eeprom_write_byte((uint8_t*)MIN_TEMP_1_ADDR, ((temp & 0xF0) >> 8));
-  eeprom_write_byte((uint8_t*)MIN_TEMP_1_ADDR + 1, (temp & 0x0F));
+  int16_t tu;
+  uint16_t t = eeprom_read_word((uint16_t*)MAX_TEMP_1_ADDR);
+  tu = (int16_t)t;
+  if ((tu > 800) && (tu < -45)) tu = 250;
+  temps[0][0] = (int16_t)tu;
+  return (int16_t)tu;
 }
 //=============================================================================
-int16_t load_min_temp1(void)
+int16_t load_min_temp_1(void)
 {
-  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_1_ADDR);
-  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_1_ADDR + 1);
-  uint16_t t = th;
-  t = (t << 8) + tl;
-  if (t > 800) t = 230;
-  temps[0][1] = (int16_t)t;
-  return (int16_t)t;
+  int16_t tu;
+  uint16_t t = eeprom_read_word((uint16_t*)MIN_TEMP_1_ADDR);
+  tu = (int16_t)t;
+  if ((tu > 800) && (tu < -45)) tu = 250;
+  temps[0][1] = (int16_t)tu;
+  return (int16_t)tu;
 }
 //=============================================================================
-void save_min_temp_2(int16_t temp)
+int16_t load_max_temp_2(void)
 {
-  eeprom_write_byte((uint8_t*)MIN_TEMP_2_ADDR, ((temp & 0xF0) >> 8));
-  eeprom_write_byte((uint8_t*)MIN_TEMP_2_ADDR + 1, (temp & 0x0F));
+  int16_t tu;
+  uint16_t t = eeprom_read_word((uint16_t*)MAX_TEMP_2_ADDR);
+  tu = (int16_t)t;
+  if ((tu > 800) && (tu < -45)) tu = 250;
+  temps[1][0] = (int16_t)tu;
+  return (int16_t)tu;
 }
 //=============================================================================
-int16_t load_min_temp2(void)
+int16_t load_min_temp_2(void)
 {
-  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_2_ADDR);
-  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_2_ADDR + 1);
-  uint16_t t = th;
-  t = (t << 8) + tl;
-  if (t > 800) t = 230;
-  temps[1][1] = (int16_t)t;
-  return (int16_t)t;
+  int16_t tu;
+  uint16_t t = eeprom_read_word((uint16_t*)MIN_TEMP_2_ADDR);
+  tu = (int16_t)t;
+  if ((tu > 800) && (tu < -45)) tu = 250;
+  temps[1][1] = (int16_t)tu;
+  return (int16_t)tu;
 }
 //=============================================================================
 void save_brightnes(uint8_t val)

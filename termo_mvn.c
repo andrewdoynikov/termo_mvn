@@ -26,10 +26,10 @@ int main(void)
   RTOS_setTask(EVENT_TIMER_SECOND05, 0, 500); // запускаем секундный таймер,
   RTOS_setTask(EVENT_KEY_POLL, 0, 5);        // запускаем сканирование клавиатуры
   RTOS_setTask(EVENT_SEARCH_SENSOR, 0, 0);   // запускаем сканирование сенсоров
-  load_max_temp1();
-  load_max_temp2();
-  load_min_temp1();
-  load_min_temp2();
+  load_max_temp_1();
+  load_max_temp_2();
+  load_min_temp_1();
+  load_min_temp_2();
   load_type1();
   load_type2();
 
