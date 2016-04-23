@@ -27,7 +27,8 @@
 //=============================================================================
 #define EVENT_KEY_POLL     		200
 #define EVENT_TIMER_SECOND		201
-#define EVENT_TIMER_SAVE		202
-#define EVENT_SCAN_SENSOR		203
+#define EVENT_TIMER_SECOND05	202
+#define EVENT_TIMER_SAVE		203
+#define EVENT_SCAN_SENSOR		204
 //=============================================================================
 #endif // EVENT_LIST_H

@@ -10,12 +10,23 @@
 //=============================================================================
 extern void (*pState)(unsigned char event);
 //=============================================================================
-uint8_t blink = 0;
+#define MMENU_MAX 2
+char *setmenu[] = {
+ "D-1 ",
+ "D-2 ",
+ "BR- "
+};
+#define MM_D1	      	0
+#define MM_D2	      	1
+#define MM_BRIGHTNES   	2
+//=============================================================================
+uint8_t blink = 1, blink05 = 1, wait_menu = WAIT_MENU_TIME;
 uint8_t ds_count = 0, one_sensor_flag = 0, dscount = 0;
 static uint8_t chanel = 1;
 uint8_t brightnes = 2;
 int16_t temps[2][2] = { {0, 0}, {0, 0} };
 uint8_t types[2] = {1, 1};
+uint8_t m_menu = MM_D1, n_edit = 0;
 //=============================================================================
 #define SET_STATE(a) pState = a // макрос для смены состояния
 //=============================================================================
@@ -125,6 +136,8 @@ void run_main(unsigned char event)
     case EVENT_KEY_SET_LONG:
       MAX7219_clearDisplay();
       SET_STATE(run_menu);
+      wait_menu = WAIT_MENU_TIME;
+	  show_menu();
     break;
     case EVENT_KEY_MINUS:
     break;
@@ -141,19 +154,50 @@ void run_menu(unsigned char event)
   switch(event) {
     case EVENT_TIMER_SECOND:
 	  blink = !blink;
-      MAX7219_setCommaPos(1, blink);
+	  if (wait_menu > 0) wait_menu--; else {
+        RTOS_setTask(EVENT_KEY_SET_LONG, 0, 0); 
+	  }
+	  if (m_menu == MM_BRIGHTNES) {
+        MAX7219_printNum(4, brightnes, 2, ' ');
+	  } else {
+        MAX7219_printStr(4, "   ");
+	  }
     break;
     case EVENT_KEY_PLUS:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (m_menu > 0) m_menu--; else m_menu = MMENU_MAX;
+	  show_menu();
+      MAX7219_printStr(5, "    ");
     break;
     case EVENT_KEY_SET:
+      wait_menu = WAIT_MENU_TIME;
+	  n_edit = 0;
+	  BEEPER_TICK();
+	  if (m_menu == MM_D1) {
+        MAX7219_clearDisplay();
+        SET_STATE(run_set_1);
+	  } else if (m_menu == MM_D2) {
+        MAX7219_clearDisplay();
+        SET_STATE(run_set_2);
+	  } else if (m_menu == MM_BRIGHTNES) {
+        SET_STATE(run_set_brightnes);
+        MAX7219_printNum(4, brightnes, 2, ' ');
+	  }
     break;
     case EVENT_KEY_SET_LONG:
+	  BEEPER_TICK();
       MAX7219_clearDisplay();
 	  chanel = 1;
       SET_STATE(run_main);
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, SHOW_TIME); 
     break;
     case EVENT_KEY_MINUS:
+	  BEEPER_TICK();
+      wait_menu = WAIT_MENU_TIME;
+      MAX7219_printStr(5, "    ");
+	  if (m_menu < MMENU_MAX) m_menu++; else m_menu = 0;
+	  show_menu();
     break;
 	default:
 	  events_default(event);
@@ -309,3 +353,292 @@ uint8_t load_type2(void)
   return t;
 }
 //=============================================================================
+void show_menu(void)
+{
+  MAX7219_printStr(1, setmenu[m_menu]);
+}
+//=============================================================================
+void run_set_1(unsigned char event)
+{
+  switch(event) {
+    case EVENT_TIMER_SECOND:
+	  blink = !blink;
+	  if (wait_menu > 0) wait_menu--; else {
+        MAX7219_clearDisplay();
+        SET_STATE(run_menu);
+	    show_menu();
+	  }
+    break;
+    case EVENT_TIMER_SECOND05:
+	  blink05 = !blink05;
+	  show_set_temp(0);
+    break;
+    case EVENT_KEY_PLUS:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[0][0] > -550) {
+		  temps[0][0]--;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[0][1] > -550) {
+		  temps[0][1]--;
+		}
+	  }
+	  if (n_edit == 2) {
+        types[0] = !types[0];
+	  }
+	  show_set_temp(0);
+    break;
+    case EVENT_KEY_PLUS_HOLD:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[0][0] > -550) {
+		  temps[0][0] -= 10;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[0][1] > -550) {
+		  temps[0][1] -= 10;
+		}
+	  }
+	  show_set_temp(0);
+    break;
+    case EVENT_KEY_SET:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+      MAX7219_clearDisplay();
+	  if (n_edit < 2) n_edit++; else n_edit = 0;
+	  show_set_temp(0);
+    break;
+    case EVENT_KEY_SET_LONG:
+	  BEEPER_TICK();
+      wait_menu = WAIT_MENU_TIME;
+      MAX7219_clearDisplay();
+      SET_STATE(run_menu);
+      show_menu();
+    break;
+    case EVENT_KEY_MINUS:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[0][0] < 790) {
+		  temps[0][0]++;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[0][1] < 790) {
+		  temps[0][1]++;
+		}
+	  }
+	  if (n_edit == 2) {
+        types[0] = !types[0];
+	  }
+	  show_set_temp(0);
+    break;
+    case EVENT_KEY_MINUS_HOLD:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[0][0] < 790) {
+		  temps[0][0] += 10;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[0][1] < 790) {
+		  temps[0][1] += 10;
+		}
+	  }
+	  show_set_temp(0);
+    break;
+	default:
+	  events_default(event);
+    break;
+  }    
+}
+//=============================================================================
+void run_set_2(unsigned char event)
+{
+  switch(event) {
+    case EVENT_TIMER_SECOND:
+	  blink = !blink;
+	  if (wait_menu > 0) wait_menu--; else {
+        MAX7219_clearDisplay();
+        SET_STATE(run_menu);
+	    show_menu();
+	  }
+    break;
+    case EVENT_TIMER_SECOND05:
+	  blink05 = !blink05;
+	  show_set_temp(1);
+    break;
+    case EVENT_KEY_PLUS:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[1][0] > -550) {
+		  temps[1][0]--;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[1][1] > -550) {
+		  temps[1][1]--;
+		}
+	  }
+	  if (n_edit == 2) {
+        types[1] = !types[1];
+	  }
+	  show_set_temp(1);
+    break;
+    case EVENT_KEY_PLUS_HOLD:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[1][0] > -550) {
+		  temps[1][0] -= 10;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[1][1] > -550) {
+		  temps[1][1] -= 10;
+		}
+	  }
+	  show_set_temp(1);
+    break;
+    case EVENT_KEY_SET:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+      MAX7219_clearDisplay();
+	  if (n_edit < 2) n_edit++; else n_edit = 0;
+	  show_set_temp(1);
+    break;
+    case EVENT_KEY_SET_LONG:
+	  BEEPER_TICK();
+      wait_menu = WAIT_MENU_TIME;
+      MAX7219_clearDisplay();
+      SET_STATE(run_menu);
+      show_menu();
+    break;
+    case EVENT_KEY_MINUS:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[1][0] < 790) {
+		  temps[1][0]++;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[1][1] < 790) {
+		  temps[1][1]++;
+		}
+	  }
+	  if (n_edit == 2) {
+        types[1] = !types[1];
+	  }
+	  show_set_temp(1);
+    break;
+    case EVENT_KEY_MINUS_HOLD:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (n_edit == 0) {
+        if (temps[1][0] < 790) {
+		  temps[1][0] += 10;
+		}
+	  }
+	  if (n_edit == 1) {
+        if (temps[1][1] < 790) {
+		  temps[1][1] += 10;
+		}
+	  }
+	  show_set_temp(1);
+    break;
+	default:
+	  events_default(event);
+    break;
+  }    
+}
+//=============================================================================
+void show_set_temp(uint8_t temp)
+{
+  if (n_edit == 0) {
+    if (blink05) {
+      print_temperature(1, temps[temp][0]);
+      MAX7219_setCommaPos(3, 1);
+    } else {
+      MAX7219_printStr(1, "    ");
+    }
+    print_temperature(5, temps[temp][1]);
+    MAX7219_setCommaPos(7, 1);
+  }
+  if (n_edit == 1) {
+    if (blink05) {
+      print_temperature(5, temps[temp][1]);
+      MAX7219_setCommaPos(7, 1);
+    } else {
+      MAX7219_printStr(5, "    ");
+	}
+    print_temperature(1, temps[temp][0]);
+    MAX7219_setCommaPos(3, 1);
+  }
+  if (n_edit == 2) {
+    MAX7219_printStr(1, "out-");
+    if (blink05) {
+	  if (types[temp]) MAX7219_printChar(5, 'o'); else MAX7219_printChar(5, 'i');
+    } else {
+	  MAX7219_printChar(5, ' ');
+	}
+  }
+}
+//=============================================================================
+void run_set_brightnes(unsigned char event)
+{
+  switch(event) {
+    case EVENT_TIMER_SECOND:
+	  blink = !blink;
+	  if (wait_menu > 0) wait_menu--; else {
+        MAX7219_clearDisplay();
+        SET_STATE(run_menu);
+	  }
+    break;
+    case EVENT_TIMER_SECOND05:
+	  blink05 = !blink05;
+	  if (blink05) {
+        MAX7219_printNum(4, brightnes, 2, ' ');
+	  } else {
+        MAX7219_printStr(4, "   ");
+	  }
+    break;
+    case EVENT_KEY_PLUS:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (brightnes > 0) {
+	    brightnes--;
+	    MAX7219_SendCmd(MAX7219_INTENSITY, brightnes);
+      }
+    break;
+    case EVENT_KEY_SET:
+    case EVENT_KEY_SET_LONG:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  save_brightnes(brightnes);
+      MAX7219_clearDisplay();
+      SET_STATE(run_menu);
+      show_menu();
+    break;
+    case EVENT_KEY_MINUS:
+      wait_menu = WAIT_MENU_TIME;
+	  BEEPER_TICK();
+	  if (brightnes < 15) {
+	    brightnes++;
+	    MAX7219_SendCmd(MAX7219_INTENSITY, brightnes);
+      }
+    break;
+	default:
+	  events_default(event);
+    break;
+  }    
+}
+//=============================================================================
+

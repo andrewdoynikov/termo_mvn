@@ -522,6 +522,7 @@ void KBD_scan(void)
     code = KBD_getBut(); 
     if (but == 1) {
 	  if (code == BUT_RELEASED_CODE) { RTOS_setTask(EVENT_KEY_PLUS, 0, 0); }
+      if ((code == BUT_HELD_CODE)) { BEEPER_TICK_LONG(); RTOS_setTask(EVENT_KEY_PLUS_HOLD, 0, 0); }
     } 
 	if (but == 2) {
 	  if (code == BUT_RELEASED_CODE) { RTOS_setTask(EVENT_KEY_SET, 0, 0); }
@@ -530,6 +531,7 @@ void KBD_scan(void)
     }
 	if (but == 3) {
 	  if (code == BUT_RELEASED_CODE) { RTOS_setTask(EVENT_KEY_MINUS, 0, 0); }
+      if ((code == BUT_HELD_CODE)) { BEEPER_TICK_LONG(); RTOS_setTask(EVENT_KEY_MINUS_HOLD, 0, 0); }
     }
   }
 }
