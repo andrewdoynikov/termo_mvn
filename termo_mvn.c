@@ -16,6 +16,7 @@
 int main(void)
 {
   MAX7219_Init();
+  MAX7219_SendCmd(MAX7219_INTENSITY, load_brightnes());
   KBD_init();
   OUT_1_init();
   OUT_2_init();
@@ -24,6 +25,12 @@ int main(void)
   RTOS_setTask(EVENT_TIMER_SECOND, 0, 1000); // запускаем секундный таймер,
   RTOS_setTask(EVENT_KEY_POLL, 0, 5);        // запускаем сканирование клавиатуры
   RTOS_setTask(EVENT_SEARCH_SENSOR, 0, 0);   // запускаем сканирование сенсоров
+  load_max_temp1();
+  load_max_temp2();
+  load_min_temp1();
+  load_min_temp2();
+  load_type1();
+  load_type2();
 
 #if (DEBUG == 1)
   while(1) {

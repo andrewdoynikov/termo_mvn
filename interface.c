@@ -10,10 +10,12 @@
 //=============================================================================
 extern void (*pState)(unsigned char event);
 //=============================================================================
-unsigned char blink = 0;
-unsigned char ds_count = 0;
-unsigned char one_sensor_flag = 0;
-unsigned char dscount = 0;
+uint8_t blink = 0;
+uint8_t ds_count = 0, one_sensor_flag = 0, dscount = 0;
+static uint8_t chanel = 1;
+uint8_t brightnes = 2;
+int16_t temps[2][2] = { {0, 0}, {0, 0} };
+uint8_t types[2] = {1, 1};
 //=============================================================================
 #define SET_STATE(a) pState = a // макрос для смены состояния
 //=============================================================================
@@ -64,8 +66,8 @@ void run_start(unsigned char event)
     break;
     case EVENT_RUN_MAIN:
       MAX7219_clearDisplay();
-      RTOS_setTask(EVENT_SCAN_SENSOR, 0, 10); 
-      RTOS_setTask(EVENT_SHOW_SENSOR, 0, SHOW_TIME); 
+      RTOS_setTask(EVENT_SCAN_SENSOR, 0, 100); 
+      RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
       SET_STATE(run_main);
     break;
 	default:
@@ -76,36 +78,57 @@ void run_start(unsigned char event)
 //=============================================================================
 void run_main(unsigned char event)
 {
-  static uint8_t chanel = 1;
   switch(event) {
     case EVENT_SHOW_SENSOR:
-	  MAX7219_printChar(2, 'd');
-	  MAX7219_printChar(3, '-');
-	  MAX7219_printChar(4, 0x30 + chanel);
-      print_temperature(5, ds18x20GetTemp(chanel));
-      MAX7219_setCommaPos(7, 1);
-      MAX7219_setCommaPos(4, one_sensor_flag);
+	  if (ds18x20GetDevCount(chanel) == 1) {
+	    MAX7219_printChar(2, 'd');
+	    MAX7219_printChar(3, '-');
+	    MAX7219_printChar(4, 0x30 + chanel);
+        print_temperature(5, ds18x20GetTemp(chanel));
+		if (chanel < 3) {
+		  if (types[chanel - 1]) {
+	        MAX7219_printChar(1, '^');
+		  } else {
+	        MAX7219_printChar(1, '_');
+		  }
+		} else {
+	      MAX7219_printChar(1, ' ');
+		}
+        MAX7219_setCommaPos(7, 1);
+        MAX7219_setCommaPos(4, one_sensor_flag);
+        RTOS_setTask(EVENT_OUT_CHECK, 0, 0); 
+	  }
       if (!one_sensor_flag) {
         if (chanel < 4) {
-	      chanel++; 
+          chanel++; 
 	    } else { 
 	      chanel = 1;
         }
+	  }
+	  if (ds18x20GetDevCount(chanel) == 0) {
+        RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
+	  } else {
+        RTOS_setTask(EVENT_SHOW_SENSOR, SHOW_TIME, 0); 
 	  }
     break;
     case EVENT_KEY_PLUS:
     break;
     case EVENT_KEY_SET:
 	  RTOS_deleteTask(EVENT_SHOW_SENSOR);
+	  BEEPER_TICK();
       one_sensor_flag = !one_sensor_flag;
 	  if (one_sensor_flag) {
 	    if (chanel > 1) chanel--; else chanel = 4;
 	  }
-      RTOS_setTask(EVENT_SHOW_SENSOR, 0, SHOW_TIME); 
+      RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
     break;
-    case EVENT_KEY_SET_HOLD:
+    case EVENT_KEY_SET_LONG:
+      MAX7219_clearDisplay();
+      SET_STATE(run_menu);
     break;
     case EVENT_KEY_MINUS:
+    break;
+    case EVENT_OUT_CHECK:
     break;
 	default:
 	  events_default(event);
@@ -116,17 +139,21 @@ void run_main(unsigned char event)
 void run_menu(unsigned char event)
 {
   switch(event) {
+    case EVENT_TIMER_SECOND:
+	  blink = !blink;
+      MAX7219_setCommaPos(1, blink);
+    break;
     case EVENT_KEY_PLUS:
-    case EVENT_KEY_PLUS_LONG:
-    case EVENT_KEY_PLUS_HOLD:
     break;
     case EVENT_KEY_SET:
+    break;
     case EVENT_KEY_SET_LONG:
-    case EVENT_KEY_SET_HOLD:
+      MAX7219_clearDisplay();
+	  chanel = 1;
+      SET_STATE(run_main);
+      RTOS_setTask(EVENT_SHOW_SENSOR, 0, SHOW_TIME); 
     break;
     case EVENT_KEY_MINUS:
-    case EVENT_KEY_MINUS_LONG:
-    case EVENT_KEY_MINUS_HOLD:
     break;
 	default:
 	  events_default(event);
@@ -162,7 +189,7 @@ void DS18x20_scan(void)
       ds18x20ConvertTemp(2);
       ds18x20ConvertTemp(3);
       ds18x20ConvertTemp(4);
-	  dscount = 100;
+	  dscount = 10;
 	  ds_state = 1;
     break;
     case 1:
@@ -170,9 +197,115 @@ void DS18x20_scan(void)
       ds18x20ReadStratchPad(2);
       ds18x20ReadStratchPad(3);
       ds18x20ReadStratchPad(4);
-	  dscount = SCAN_TIME / 10;
+	  dscount = SCAN_TIME / 100;
 	  ds_state = 0;
     break;
   }
+}
+//=============================================================================
+void save_max_temp_1(int16_t temp)
+{
+  eeprom_write_byte((uint8_t*)MAX_TEMP_1_ADDR, ((temp & 0xF0) >> 8));
+  eeprom_write_byte((uint8_t*)MAX_TEMP_1_ADDR + 1, (temp & 0x0F));
+}
+//=============================================================================
+int16_t load_max_temp1(void)
+{
+  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_1_ADDR);
+  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_1_ADDR + 1);
+  uint16_t t = th;
+  t = (t << 8) + tl;
+  if (t > 800) t = 250;
+  temps[0][0] = (int16_t)t;
+  return (int16_t)t;
+}
+//=============================================================================
+void save_max_temp_2(int16_t temp)
+{
+  eeprom_write_byte((uint8_t*)MAX_TEMP_2_ADDR, ((temp & 0xF0) >> 8));
+  eeprom_write_byte((uint8_t*)MAX_TEMP_2_ADDR + 1, (temp & 0x0F));
+}
+//=============================================================================
+int16_t load_max_temp2(void)
+{
+  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_2_ADDR);
+  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MAX_TEMP_2_ADDR + 1);
+  uint16_t t = th;
+  t = (t << 8) + tl;
+  if (t > 800) t = 250;
+  temps[1][0] = (int16_t)t;
+  return (int16_t)t;
+}
+//=============================================================================
+void save_min_temp_1(int16_t temp)
+{
+  eeprom_write_byte((uint8_t*)MIN_TEMP_1_ADDR, ((temp & 0xF0) >> 8));
+  eeprom_write_byte((uint8_t*)MIN_TEMP_1_ADDR + 1, (temp & 0x0F));
+}
+//=============================================================================
+int16_t load_min_temp1(void)
+{
+  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_1_ADDR);
+  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_1_ADDR + 1);
+  uint16_t t = th;
+  t = (t << 8) + tl;
+  if (t > 800) t = 230;
+  temps[0][1] = (int16_t)t;
+  return (int16_t)t;
+}
+//=============================================================================
+void save_min_temp_2(int16_t temp)
+{
+  eeprom_write_byte((uint8_t*)MIN_TEMP_2_ADDR, ((temp & 0xF0) >> 8));
+  eeprom_write_byte((uint8_t*)MIN_TEMP_2_ADDR + 1, (temp & 0x0F));
+}
+//=============================================================================
+int16_t load_min_temp2(void)
+{
+  uint8_t th = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_2_ADDR);
+  uint8_t tl = eeprom_read_byte((uint8_t*)(uint8_t*)MIN_TEMP_2_ADDR + 1);
+  uint16_t t = th;
+  t = (t << 8) + tl;
+  if (t > 800) t = 230;
+  temps[1][1] = (int16_t)t;
+  return (int16_t)t;
+}
+//=============================================================================
+void save_brightnes(uint8_t val)
+{
+  eeprom_write_byte((uint8_t*)BRIGHTNES_ADDR, val);
+}
+//=============================================================================
+uint8_t load_brightnes(void)
+{
+  brightnes = eeprom_read_byte((uint8_t*)BRIGHTNES_ADDR);
+  if (brightnes > 15) brightnes = 2;
+  return brightnes;
+}
+//=============================================================================
+void save_type_1(uint8_t temp)
+{
+  eeprom_write_byte((uint8_t*)OUT_TYPE_1_ADDR, temp);
+}
+//=============================================================================
+uint8_t load_type1(void)
+{
+  uint8_t t = eeprom_read_byte((uint8_t*)OUT_TYPE_1_ADDR);
+  if (t > 1) t = 1;
+  types[0] = t;
+  return t;
+}
+//=============================================================================
+void save_type_2(uint8_t temp)
+{
+  eeprom_write_byte((uint8_t*)OUT_TYPE_2_ADDR, temp);
+}
+//=============================================================================
+uint8_t load_type2(void)
+{
+  uint8_t t = eeprom_read_byte((uint8_t*)OUT_TYPE_2_ADDR);
+  if (t > 1) t = 1;
+  types[1] = t;
+  return t;
 }
 //=============================================================================

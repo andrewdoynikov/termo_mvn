@@ -17,10 +17,11 @@
 //=============================================================================
 // Сообщения начального запуска
 #define EVENT_SEARCH_SENSOR		100
-#define EVENT_RUN_MAIN			102
-#define EVENT_START_CONVERTIONS	103
-#define EVENT_GET_TEMPERATURE	104
-#define EVENT_SHOW_SENSOR		105
+#define EVENT_RUN_MAIN			101
+#define EVENT_START_CONVERTIONS	102
+#define EVENT_GET_TEMPERATURE	103
+#define EVENT_SHOW_SENSOR		104
+#define EVENT_OUT_CHECK		    105
 //=============================================================================
 // Системные сообщения
 //=============================================================================

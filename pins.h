@@ -92,5 +92,12 @@
 #define SHOW_TIME			2000
 #define SCAN_TIME			2000
 //=============================================================================
-
+#define MAX_TEMP_1_ADDR		0x10
+#define MIN_TEMP_1_ADDR		0x12
+#define OUT_TYPE_1_ADDR		0x14
+#define MAX_TEMP_2_ADDR		0x20
+#define MIN_TEMP_2_ADDR		0x22
+#define OUT_TYPE_2_ADDR		0x24
+#define BRIGHTNES_ADDR		0x30
+//=============================================================================
 #endif /* PINS_H */
