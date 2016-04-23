@@ -418,6 +418,9 @@ void run_set_1(unsigned char event)
       wait_menu = WAIT_MENU_TIME;
       MAX7219_clearDisplay();
       SET_STATE(run_menu);
+      save_max_temp_1(temps[0][0]);
+      save_min_temp_1(temps[0][1]);
+	  save_type_1(types[0]);
       show_menu();
     break;
     case EVENT_KEY_MINUS:
@@ -519,6 +522,9 @@ void run_set_2(unsigned char event)
       wait_menu = WAIT_MENU_TIME;
       MAX7219_clearDisplay();
       SET_STATE(run_menu);
+      save_max_temp_2(temps[1][0]);
+      save_min_temp_2(temps[1][1]);
+	  save_type_2(types[1]);
       show_menu();
     break;
     case EVENT_KEY_MINUS:
