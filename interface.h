@@ -31,5 +31,6 @@ uint8_t load_type2(void);
 //=============================================================================
 void show_menu(void);
 void show_set_temp(uint8_t temp);
+void check_temp(uint8_t chanel);
 //=============================================================================
 #endif

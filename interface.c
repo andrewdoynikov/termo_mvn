@@ -19,6 +19,10 @@ char *setmenu[] = {
 #define MM_D1	      	0
 #define MM_D2	      	1
 #define MM_BRIGHTNES   	2
+#define T_MAX			0 	
+#define T_MIN			1 	
+#define T_OTSLED_MAX	1 	
+#define T_OTSLED_MIN	0 	
 //=============================================================================
 uint8_t blink = 1, blink05 = 1, wait_menu = WAIT_MENU_TIME;
 uint8_t ds_count = 0, one_sensor_flag = 0, dscount = 0;
@@ -26,6 +30,7 @@ static uint8_t chanel = 1;
 uint8_t brightnes = 2;
 int16_t temps[2][2] = { {0, 0}, {0, 0} };
 uint8_t types[2] = {1, 1};
+uint8_t status[2] = {T_OTSLED_MAX, T_OTSLED_MAX};
 uint8_t m_menu = MM_D1, n_edit = 0;
 //=============================================================================
 #define SET_STATE(a) pState = a // макрос для смены состояния
@@ -76,6 +81,7 @@ void run_start(unsigned char event)
       RTOS_setTask(EVENT_RUN_MAIN, 100, 0);
     break;
     case EVENT_RUN_MAIN:
+      check_temp(chanel);
       MAX7219_clearDisplay();
       RTOS_setTask(EVENT_SCAN_SENSOR, 0, 100); 
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
@@ -85,6 +91,60 @@ void run_start(unsigned char event)
 	  events_default(event);
     break;
   }    
+}
+//=============================================================================
+void check_temp(uint8_t chanel)
+{
+ int16_t t = ds18x20GetTemp(chanel);
+ if (status[chanel - 1] == T_OTSLED_MAX) {
+ // отслеживаем превышение максимума
+   if (t < temps[chanel - 1][T_MAX]) {
+     if (types[chanel - 1] == 1) {
+       if (chanel == 1) OUT_1_1();
+       if (chanel == 2) OUT_2_1();
+       MAX7219_setCommaPos(1, 1);
+	 } else {
+       if (chanel == 1) OUT_1_0();
+       if (chanel == 2) OUT_2_0();
+       MAX7219_setCommaPos(1, 0);
+	 }
+   } else {
+     status[chanel - 1] = T_OTSLED_MIN;
+     if (types[chanel - 1] == 1) {
+       if (chanel == 1) OUT_1_0();
+       if (chanel == 2) OUT_2_0();
+       MAX7219_setCommaPos(1, 0);
+	 } else {
+       if (chanel == 1) OUT_1_1();
+       if (chanel == 2) OUT_2_1();
+       MAX7219_setCommaPos(1, 1);
+	 }
+   }
+ } else {
+ // отслеживаем превышение минимума
+   if (t < temps[chanel - 1][T_MIN]) {
+     status[chanel - 1] = T_OTSLED_MAX;
+     if (types[chanel - 1] == 1) {
+       if (chanel == 1) OUT_1_1();
+       if (chanel == 2) OUT_2_1();
+       MAX7219_setCommaPos(1, 1);
+	 } else {
+       if (chanel == 1) OUT_1_0();
+       if (chanel == 2) OUT_2_0();
+       MAX7219_setCommaPos(1, 0);
+	 }
+   } else {
+     if (types[chanel - 1] == 1) {
+       if (chanel == 1) OUT_1_1();
+       if (chanel == 2) OUT_2_1();
+       MAX7219_setCommaPos(1, 1);
+	 } else {
+       if (chanel == 1) OUT_1_0();
+       if (chanel == 2) OUT_2_0();
+       MAX7219_setCommaPos(1, 0);
+	 }
+   }
+ }
 }
 //=============================================================================
 void run_main(unsigned char event)
@@ -102,12 +162,13 @@ void run_main(unsigned char event)
 		  } else {
 	        MAX7219_printChar(1, '_');
 		  }
+          check_temp(chanel);
 		} else {
 	      MAX7219_printChar(1, ' ');
+          MAX7219_setCommaPos(1, 0);
 		}
         MAX7219_setCommaPos(7, 1);
         MAX7219_setCommaPos(4, one_sensor_flag);
-        RTOS_setTask(EVENT_OUT_CHECK, 0, 0); 
 	  }
       if (!one_sensor_flag) {
         if (chanel < 4) {
@@ -140,8 +201,6 @@ void run_main(unsigned char event)
 	  show_menu();
     break;
     case EVENT_KEY_MINUS:
-    break;
-    case EVENT_OUT_CHECK:
     break;
 	default:
 	  events_default(event);

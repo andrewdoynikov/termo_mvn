@@ -29,14 +29,14 @@
 #define OUT_1_LINE			(1 << OUT_1_PIN)
 #define OUT_1_0()			PORT(OUT_1) &= ~(OUT_1_LINE)
 #define OUT_1_1()			PORT(OUT_1) |= (OUT_1_LINE)
-#define OUT_1_init()		DDR(OUT_1) |= (OUT_1_LINE); OUT_1_0();
+#define OUT_1_init()		DDR(OUT_1) |= (OUT_1_LINE); OUT_1_1();
 
 #define OUT_2				D
 #define OUT_2_PIN			2
 #define OUT_2_LINE			(1 << OUT_1_PIN)
 #define OUT_2_0()			PORT(OUT_2) &= ~(OUT_2_LINE)
 #define OUT_2_1()			PORT(OUT_2) |= (OUT_2_LINE)
-#define OUT_2_init()		DDR(OUT_2) |= (OUT_2_LINE); OUT_2_0();
+#define OUT_2_init()		DDR(OUT_2) |= (OUT_2_LINE); OUT_2_1();
 //=============================================================================
 // Спикер
 #define BEEPER				C
