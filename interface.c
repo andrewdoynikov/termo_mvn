@@ -456,21 +456,6 @@ void run_set_1(unsigned char event)
 	  }
 	  show_set_temp(0);
     break;
-    case EVENT_KEY_PLUS_HOLD:
-      wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
-	  if (n_edit == 0) {
-        if (temps[0][0] > -550) {
-		  temps[0][0] -= 10;
-		}
-	  }
-	  if (n_edit == 1) {
-        if (temps[0][1] > -550) {
-		  temps[0][1] -= 10;
-		}
-	  }
-	  show_set_temp(0);
-    break;
     case EVENT_KEY_SET:
       wait_menu = WAIT_MENU_TIME;
 	  BEEPER_TICK();
@@ -513,21 +498,6 @@ void run_set_1(unsigned char event)
 	  }
 	  show_set_temp(0);
     break;
-    case EVENT_KEY_MINUS_HOLD:
-      wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
-	  if (n_edit == 0) {
-        if (temps[0][0] < 790) {
-		  temps[0][0] += 10;
-		}
-	  }
-	  if (n_edit == 1) {
-        if (temps[0][1] < 790) {
-		  temps[0][1] += 10;
-		}
-	  }
-	  show_set_temp(0);
-    break;
 	default:
 	  events_default(event);
     break;
@@ -564,21 +534,6 @@ void run_set_2(unsigned char event)
 	  }
 	  if (n_edit == 2) {
         types[1] = !types[1];
-	  }
-	  show_set_temp(1);
-    break;
-    case EVENT_KEY_PLUS_HOLD:
-      wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
-	  if (n_edit == 0) {
-        if (temps[1][0] > -550) {
-		  temps[1][0] -= 10;
-		}
-	  }
-	  if (n_edit == 1) {
-        if (temps[1][1] > -550) {
-		  temps[1][1] -= 10;
-		}
 	  }
 	  show_set_temp(1);
     break;
@@ -621,21 +576,6 @@ void run_set_2(unsigned char event)
 	  }
 	  if (n_edit == 2) {
         types[1] = !types[1];
-	  }
-	  show_set_temp(1);
-    break;
-    case EVENT_KEY_MINUS_HOLD:
-      wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
-	  if (n_edit == 0) {
-        if (temps[1][0] < 790) {
-		  temps[1][0] += 10;
-		}
-	  }
-	  if (n_edit == 1) {
-        if (temps[1][1] < 790) {
-		  temps[1][1] += 10;
-		}
 	  }
 	  show_set_temp(1);
     break;
