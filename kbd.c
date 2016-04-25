@@ -526,8 +526,7 @@ void KBD_scan(void)
     } 
 	if (but == 2) {
 	  if (code == BUT_RELEASED_CODE) { RTOS_setTask(EVENT_KEY_SET, 0, 0); }
-      if ((code == BUT_HELD_CODE)) { BEEPER_TICK_LONG(); RTOS_setTask(EVENT_KEY_SET_HOLD, 0, 0); }
-	  if (code == BUT_RELEASED_LONG_CODE) { RTOS_setTask(EVENT_KEY_SET_LONG, 0, 0); }
+      if ((code == BUT_HELD_CODE)) { BEEPER_TICK_LONG(); RTOS_setTask(EVENT_KEY_SET_LONG, 0, 0); }
     }
 	if (but == 3) {
 	  if (code == BUT_RELEASED_CODE) { RTOS_setTask(EVENT_KEY_MINUS, 0, 0); }

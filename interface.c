@@ -23,9 +23,11 @@ char *setmenu[] = {
 #define T_MIN			1 	
 #define T_OTSLED_MAX	1 	
 #define T_OTSLED_MIN	0 	
+#define T_HEATER		1 	
+#define T_FAN			0 	
 //=============================================================================
 uint8_t blink = 1, blink05 = 1, wait_menu = WAIT_MENU_TIME;
-uint8_t ds_count = 0, one_sensor_flag = 0, dscount = 0;
+uint8_t ds_count = 0, one_sensor_flag = 0, dscount = 0, error_cnt = ERROR_TIME;
 static uint8_t chanel = 1;
 uint8_t brightnes = 2;
 int16_t temps[2][2] = { {0, 0}, {0, 0} };
@@ -81,6 +83,8 @@ void run_start(unsigned char event)
       RTOS_setTask(EVENT_RUN_MAIN, 100, 0);
     break;
     case EVENT_RUN_MAIN:
+	  if (ds18x20GetTemp(1) < temps[0][0]) status[0] = T_OTSLED_MAX; else status[0] = T_OTSLED_MIN;
+	  if (ds18x20GetTemp(2) < temps[1][0]) status[1] = T_OTSLED_MAX; else status[1] = T_OTSLED_MIN;
       check_temp(chanel);
       MAX7219_clearDisplay();
       RTOS_setTask(EVENT_SCAN_SENSOR, 0, 100); 
@@ -98,33 +102,33 @@ void check_temp(uint8_t chanel)
  int16_t t = ds18x20GetTemp(chanel);
  if (status[chanel - 1] == T_OTSLED_MAX) {
  // отслеживаем превышение максимума
-   if (t < temps[chanel - 1][T_MAX]) {
-     if (types[chanel - 1] == 1) {
-       if (chanel == 1) OUT_1_1();
-       if (chanel == 2) OUT_2_1();
-       MAX7219_setCommaPos(1, 1);
-	 } else {
+   if (t > temps[chanel - 1][T_MAX]) {
+     status[chanel - 1] = T_OTSLED_MIN;
+     if (types[chanel - 1] == T_HEATER) {
        if (chanel == 1) OUT_1_0();
        if (chanel == 2) OUT_2_0();
        MAX7219_setCommaPos(1, 0);
+	 } else {
+       if (chanel == 1) OUT_1_1();
+       if (chanel == 2) OUT_2_1();
+       MAX7219_setCommaPos(1, 1);
 	 }
    } else {
-     status[chanel - 1] = T_OTSLED_MIN;
-     if (types[chanel - 1] == 1) {
-       if (chanel == 1) OUT_1_0();
-       if (chanel == 2) OUT_2_0();
-       MAX7219_setCommaPos(1, 0);
-	 } else {
+     if (types[chanel - 1] == T_HEATER) {
        if (chanel == 1) OUT_1_1();
        if (chanel == 2) OUT_2_1();
        MAX7219_setCommaPos(1, 1);
+	 } else {
+       if (chanel == 1) OUT_1_0();
+       if (chanel == 2) OUT_2_0();
+       MAX7219_setCommaPos(1, 0);
 	 }
    }
  } else {
- // отслеживаем превышение минимума
+   // отслеживаем превышение минимума
    if (t < temps[chanel - 1][T_MIN]) {
      status[chanel - 1] = T_OTSLED_MAX;
-     if (types[chanel - 1] == 1) {
+     if (types[chanel - 1] == T_HEATER) {
        if (chanel == 1) OUT_1_1();
        if (chanel == 2) OUT_2_1();
        MAX7219_setCommaPos(1, 1);
@@ -134,14 +138,14 @@ void check_temp(uint8_t chanel)
        MAX7219_setCommaPos(1, 0);
 	 }
    } else {
-     if (types[chanel - 1] == 1) {
-       if (chanel == 1) OUT_1_1();
-       if (chanel == 2) OUT_2_1();
-       MAX7219_setCommaPos(1, 1);
-	 } else {
+     if (types[chanel - 1] == T_HEATER) {
        if (chanel == 1) OUT_1_0();
        if (chanel == 2) OUT_2_0();
        MAX7219_setCommaPos(1, 0);
+	 } else {
+       if (chanel == 1) OUT_1_1();
+       if (chanel == 2) OUT_2_1();
+       MAX7219_setCommaPos(1, 1);
 	 }
    }
  }
@@ -152,8 +156,7 @@ void run_main(unsigned char event)
   switch(event) {
     case EVENT_SHOW_SENSOR:
 	  if (ds18x20GetDevCount(chanel) == 1) {
-	    MAX7219_printChar(2, 'd');
-	    MAX7219_printChar(3, '-');
+	    MAX7219_printChar(3, 'd');
 	    MAX7219_printChar(4, 0x30 + chanel);
         print_temperature(5, ds18x20GetTemp(chanel));
 		if (chanel < 3) {
@@ -169,6 +172,9 @@ void run_main(unsigned char event)
 		}
         MAX7219_setCommaPos(7, 1);
         MAX7219_setCommaPos(4, one_sensor_flag);
+	  } else {
+		if (chanel == 1) { OUT_1_0(); }
+		if (chanel == 2) { OUT_2_0(); }
 	  }
       if (!one_sensor_flag) {
         if (chanel < 4) {
@@ -300,6 +306,14 @@ void DS18x20_scan(void)
       ds18x20ReadStratchPad(2);
       ds18x20ReadStratchPad(3);
       ds18x20ReadStratchPad(4);
+	  dscount = 10;
+	  ds_state = 2;
+    break;
+    case 2:
+      ds18x20GetTemp(1);
+      ds18x20GetTemp(2);
+      ds18x20GetTemp(3);
+      ds18x20GetTemp(4);
 	  dscount = SCAN_TIME / 100;
 	  ds_state = 0;
     break;
@@ -467,12 +481,19 @@ void run_set_1(unsigned char event)
     case EVENT_KEY_SET_LONG:
 	  BEEPER_TICK();
       wait_menu = WAIT_MENU_TIME;
-      MAX7219_clearDisplay();
-      SET_STATE(run_menu);
-      save_max_temp_1(temps[0][0]);
-      save_min_temp_1(temps[0][1]);
-	  save_type_1(types[0]);
-      show_menu();
+	  if (temps[0][0] > temps[0][1]) {
+        MAX7219_clearDisplay();
+        SET_STATE(run_menu);
+        save_max_temp_1(temps[0][0]);
+        save_min_temp_1(temps[0][1]);
+	    save_type_1(types[0]);
+        show_menu();
+	  } else {
+        MAX7219_clearDisplay();
+        SET_STATE(run_error);
+        error_cnt = ERROR_TIME;
+        RTOS_setTask(EVENT_TIMER_SECOND05, 0, 500); 
+	  }
     break;
     case EVENT_KEY_MINUS:
       wait_menu = WAIT_MENU_TIME;
@@ -571,12 +592,19 @@ void run_set_2(unsigned char event)
     case EVENT_KEY_SET_LONG:
 	  BEEPER_TICK();
       wait_menu = WAIT_MENU_TIME;
-      MAX7219_clearDisplay();
-      SET_STATE(run_menu);
-      save_max_temp_2(temps[1][0]);
-      save_min_temp_2(temps[1][1]);
-	  save_type_2(types[1]);
-      show_menu();
+	  if (temps[1][0] > temps[1][1]) {
+        MAX7219_clearDisplay();
+        SET_STATE(run_menu);
+        save_max_temp_2(temps[1][0]);
+        save_min_temp_2(temps[1][1]);
+	    save_type_2(types[1]);
+        show_menu();
+	  } else {
+        MAX7219_clearDisplay();
+        SET_STATE(run_error);
+        error_cnt = ERROR_TIME;
+        RTOS_setTask(EVENT_TIMER_SECOND05, 0, 500); 
+	  }
     break;
     case EVENT_KEY_MINUS:
       wait_menu = WAIT_MENU_TIME;
@@ -642,7 +670,7 @@ void show_set_temp(uint8_t temp)
   if (n_edit == 2) {
     MAX7219_printStr(1, "out-");
     if (blink05) {
-	  if (types[temp]) MAX7219_printChar(5, 'o'); else MAX7219_printChar(5, 'i');
+	  if (types[temp]) MAX7219_printChar(5, 'H'); else MAX7219_printChar(5, 'F');
     } else {
 	  MAX7219_printChar(5, ' ');
 	}
@@ -698,4 +726,37 @@ void run_set_brightnes(unsigned char event)
   }    
 }
 //=============================================================================
+void run_error(unsigned char event)
+{
+  switch(event) {
+    case EVENT_TIMER_SECOND:
+	  blink = !blink;
+	  if (error_cnt > 0) error_cnt--; else {
+        wait_menu = WAIT_MENU_TIME;
+        SET_STATE(run_menu);
+        MAX7219_clearDisplay();
+        show_menu();
+	  }
+    break;
+    case EVENT_TIMER_SECOND05:
+	  blink05 = !blink05;
+	  if (blink05) {
+        MAX7219_printStr(5, "Err ");
+	  } else {
+        MAX7219_printStr(5, "    ");
+	  }
+    break;
+    case EVENT_KEY_SET:
+    case EVENT_KEY_MINUS:
+    case EVENT_KEY_PLUS:
+	  BEEPER_TICK();
+      wait_menu = WAIT_MENU_TIME;
+      SET_STATE(run_menu);
+      MAX7219_clearDisplay();
+      show_menu();
+    break;
+  }
+}
+//=============================================================================
+
 

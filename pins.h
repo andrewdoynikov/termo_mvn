@@ -92,6 +92,7 @@
 #define SHOW_TIME			2000
 #define SCAN_TIME			2000
 #define WAIT_MENU_TIME		20
+#define ERROR_TIME			5
 //=============================================================================
 #define MAX_TEMP_1_ADDR		0x10
 #define MIN_TEMP_1_ADDR		0x12

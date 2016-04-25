@@ -8,6 +8,7 @@ void events_default(unsigned char event);
 void run_set_1(unsigned char event);
 void run_set_2(unsigned char event);
 void run_set_brightnes(unsigned char event);
+void run_error(unsigned char event);
 //=============================================================================
 void print_temperature(uint8_t pos, int temp);
 void DS18x20_scan(void);

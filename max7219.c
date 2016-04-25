@@ -111,6 +111,10 @@ char MAX7219_lookupCode(char character)
     case 'F':
       return ((1<<SEG_A)|(0<<SEG_B)|(0<<SEG_C)|(0<<SEG_D)|(1<<SEG_E)|(1<<SEG_F)|(1<<SEG_G)|(0<<SEG_H));
     break;
+    case 'e':
+    case 'E':
+      return ((1<<SEG_A)|(0<<SEG_B)|(0<<SEG_C)|(1<<SEG_D)|(1<<SEG_E)|(1<<SEG_F)|(1<<SEG_G)|(0<<SEG_H));
+    break;
 	default:
       return IND_BLANK;
     break;
