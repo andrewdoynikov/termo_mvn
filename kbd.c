@@ -14,6 +14,7 @@ void KBD_init(void)
   PORT(BUT_SET) |= BUT_SET_LINE;
   DDR(BUT_MINUS) &= ~BUT_MINUS_LINE;
   PORT(BUT_MINUS) |= BUT_MINUS_LINE;
+  kbd_type = 1;
 }
 //=============================================================================
 void KBD_set_type(uint8_t val)
@@ -50,15 +51,14 @@ unsigned char debounce_sw_minus(void)
 //=============================================================================
 void KBD_scan(void)
 {
-  unsigned char key = 0;
-  if (debounce_sw_plus() >= 1) { key |= (1 << 0); }
-  if (debounce_sw_minus() >= 1) { key |= (1 << 1); }
-  if (debounce_sw_set() == 1) { key |= (1 << 2); }
-  if (key == 5) { BEEPER_TICK_LONG(); RTOS_setTask(EVENT_KEY_SET_LONG, 0, 0); }
-  if (key == 6) { BEEPER_TICK_LONG(); RTOS_setTask(EVENT_KEY_SET_LONG, 0, 0); }
-  if (key == 1) { RTOS_setTask(EVENT_KEY_PLUS, 0, 0); }
-  if (key == 2) { RTOS_setTask(EVENT_KEY_MINUS, 0, 0); }
-  if (key == 4) { RTOS_setTask(EVENT_KEY_SET, 0, 0); }
+  if (kbd_type == 1) {
+    if (debounce_sw_plus() == 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_PLUS, 0, 0); }
+    if (debounce_sw_minus() == 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_MINUS, 0, 0); }
+  } else {
+    if (debounce_sw_plus() >= 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_PLUS, 0, 0); }
+    if (debounce_sw_minus() >= 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_MINUS, 0, 0); }
+  }
+  if (debounce_sw_set() == 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_SET, 0, 0); }
 }
 //=============================================================================
  

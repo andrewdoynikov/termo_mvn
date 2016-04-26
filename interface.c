@@ -10,15 +10,17 @@
 //=============================================================================
 extern void (*pState)(unsigned char event);
 //=============================================================================
-#define MMENU_MAX 2
+#define MMENU_MAX 3
 char *setmenu[] = {
  "D-1 ",
  "D-2 ",
- "BR- "
+ "BR- ",
+ "End "
 };
 #define MM_D1	      	0
 #define MM_D2	      	1
 #define MM_BRIGHTNES   	2
+#define MM_END	   		3
 #define T_MAX			0 	
 #define T_MIN			1 	
 #define T_OTSLED_MAX	1 	
@@ -99,56 +101,60 @@ void run_start(unsigned char event)
 //=============================================================================
 void check_temp(uint8_t chanel)
 {
- int16_t t = ds18x20GetTemp(chanel);
- if (status[chanel - 1] == T_OTSLED_MAX) {
+  if (ds18x20GetDevCount(chanel) == 0) {
+    if (chanel == 1) OUT_1_0();
+    if (chanel == 2) OUT_2_0();
+  }
+  int16_t t = ds18x20GetTemp(chanel);
+  if (status[chanel - 1] == T_OTSLED_MAX) {
  // отслеживаем превышение максимума
-   if (t > temps[chanel - 1][T_MAX]) {
-     status[chanel - 1] = T_OTSLED_MIN;
-     if (types[chanel - 1] == T_HEATER) {
-       if (chanel == 1) OUT_1_0();
-       if (chanel == 2) OUT_2_0();
-       MAX7219_setCommaPos(1, 0);
-	 } else {
-       if (chanel == 1) OUT_1_1();
-       if (chanel == 2) OUT_2_1();
-       MAX7219_setCommaPos(1, 1);
-	 }
-   } else {
-     if (types[chanel - 1] == T_HEATER) {
-       if (chanel == 1) OUT_1_1();
-       if (chanel == 2) OUT_2_1();
-       MAX7219_setCommaPos(1, 1);
-	 } else {
-       if (chanel == 1) OUT_1_0();
-       if (chanel == 2) OUT_2_0();
-       MAX7219_setCommaPos(1, 0);
-	 }
-   }
- } else {
+    if (t > temps[chanel - 1][T_MAX]) {
+      status[chanel - 1] = T_OTSLED_MIN;
+      if (types[chanel - 1] == T_HEATER) {
+        if (chanel == 1) OUT_1_0();
+        if (chanel == 2) OUT_2_0();
+        MAX7219_setCommaPos(1, 0);
+	  } else {
+        if (chanel == 1) OUT_1_1();
+        if (chanel == 2) OUT_2_1();
+        MAX7219_setCommaPos(1, 1);
+	  }
+    } else {
+      if (types[chanel - 1] == T_HEATER) {
+        if (chanel == 1) OUT_1_1();
+        if (chanel == 2) OUT_2_1();
+        MAX7219_setCommaPos(1, 1);
+	  } else {
+        if (chanel == 1) OUT_1_0();
+        if (chanel == 2) OUT_2_0();
+        MAX7219_setCommaPos(1, 0);
+	  }
+    }
+  } else {
    // отслеживаем превышение минимума
-   if (t < temps[chanel - 1][T_MIN]) {
-     status[chanel - 1] = T_OTSLED_MAX;
-     if (types[chanel - 1] == T_HEATER) {
-       if (chanel == 1) OUT_1_1();
-       if (chanel == 2) OUT_2_1();
-       MAX7219_setCommaPos(1, 1);
-	 } else {
-       if (chanel == 1) OUT_1_0();
-       if (chanel == 2) OUT_2_0();
-       MAX7219_setCommaPos(1, 0);
-	 }
-   } else {
-     if (types[chanel - 1] == T_HEATER) {
-       if (chanel == 1) OUT_1_0();
-       if (chanel == 2) OUT_2_0();
-       MAX7219_setCommaPos(1, 0);
-	 } else {
-       if (chanel == 1) OUT_1_1();
-       if (chanel == 2) OUT_2_1();
-       MAX7219_setCommaPos(1, 1);
-	 }
-   }
- }
+    if (t < temps[chanel - 1][T_MIN]) {
+      status[chanel - 1] = T_OTSLED_MAX;
+      if (types[chanel - 1] == T_HEATER) {
+        if (chanel == 1) OUT_1_1();
+        if (chanel == 2) OUT_2_1();
+        MAX7219_setCommaPos(1, 1);
+	  } else {
+        if (chanel == 1) OUT_1_0();
+        if (chanel == 2) OUT_2_0();
+        MAX7219_setCommaPos(1, 0);
+	  }
+    } else {
+      if (types[chanel - 1] == T_HEATER) {
+        if (chanel == 1) OUT_1_0();
+        if (chanel == 2) OUT_2_0();
+        MAX7219_setCommaPos(1, 0);
+	  } else {
+        if (chanel == 1) OUT_1_1();
+        if (chanel == 2) OUT_2_1();
+        MAX7219_setCommaPos(1, 1);
+	  }
+    }
+  }
 }
 //=============================================================================
 void run_main(unsigned char event)
@@ -161,9 +167,9 @@ void run_main(unsigned char event)
         print_temperature(5, ds18x20GetTemp(chanel));
 		if (chanel < 3) {
 		  if (types[chanel - 1]) {
-	        MAX7219_printChar(1, '^');
+	        MAX7219_printChar(1, 'H');
 		  } else {
-	        MAX7219_printChar(1, '_');
+	        MAX7219_printChar(1, 'F');
 		  }
           check_temp(chanel);
 		} else {
@@ -189,24 +195,21 @@ void run_main(unsigned char event)
         RTOS_setTask(EVENT_SHOW_SENSOR, SHOW_TIME, 0); 
 	  }
     break;
+    case EVENT_KEY_MINUS:
     case EVENT_KEY_PLUS:
-    break;
-    case EVENT_KEY_SET:
 	  RTOS_deleteTask(EVENT_SHOW_SENSOR);
-	  BEEPER_TICK();
       one_sensor_flag = !one_sensor_flag;
 	  if (one_sensor_flag) {
 	    if (chanel > 1) chanel--; else chanel = 4;
 	  }
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
     break;
-    case EVENT_KEY_SET_LONG:
+    case EVENT_KEY_SET:
+	  n_edit = 0;
       MAX7219_clearDisplay();
       SET_STATE(run_menu);
       wait_menu = WAIT_MENU_TIME;
 	  show_menu();
-    break;
-    case EVENT_KEY_MINUS:
     break;
 	default:
 	  events_default(event);
@@ -220,7 +223,7 @@ void run_menu(unsigned char event)
     case EVENT_TIMER_SECOND:
 	  blink = !blink;
 	  if (wait_menu > 0) wait_menu--; else {
-        RTOS_setTask(EVENT_KEY_SET_LONG, 0, 0); 
+        RTOS_setTask(EVENT_EXIT_MENU, 0, 0); 
 	  }
 	  if (m_menu == MM_BRIGHTNES) {
         MAX7219_printNum(4, brightnes, 2, ' ');
@@ -230,7 +233,6 @@ void run_menu(unsigned char event)
     break;
     case EVENT_KEY_PLUS:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
 	  if (m_menu > 0) m_menu--; else m_menu = MMENU_MAX;
 	  show_menu();
       MAX7219_printStr(5, "    ");
@@ -238,27 +240,32 @@ void run_menu(unsigned char event)
     case EVENT_KEY_SET:
       wait_menu = WAIT_MENU_TIME;
 	  n_edit = 0;
-	  BEEPER_TICK();
+      MAX7219_clearDisplay();
 	  if (m_menu == MM_D1) {
-        MAX7219_clearDisplay();
+		KBD_set_type(0);
         SET_STATE(run_set_1);
 	  } else if (m_menu == MM_D2) {
-        MAX7219_clearDisplay();
+		KBD_set_type(0);
         SET_STATE(run_set_2);
 	  } else if (m_menu == MM_BRIGHTNES) {
+		KBD_set_type(1);
         SET_STATE(run_set_brightnes);
         MAX7219_printNum(4, brightnes, 2, ' ');
+	  } else if (m_menu == MM_END) {
+		KBD_set_type(1);
+        RTOS_setTask(EVENT_EXIT_MENU, 0, 0); 
 	  }
     break;
-    case EVENT_KEY_SET_LONG:
-	  BEEPER_TICK();
+    case EVENT_EXIT_MENU:
       MAX7219_clearDisplay();
 	  chanel = 1;
+	  if (ds18x20GetTemp(1) < temps[0][0]) status[0] = T_OTSLED_MAX; else status[0] = T_OTSLED_MIN;
+	  if (ds18x20GetTemp(2) < temps[1][0]) status[1] = T_OTSLED_MAX; else status[1] = T_OTSLED_MIN;
+      check_temp(chanel);
       SET_STATE(run_main);
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, SHOW_TIME); 
     break;
     case EVENT_KEY_MINUS:
-	  BEEPER_TICK();
       wait_menu = WAIT_MENU_TIME;
       MAX7219_printStr(5, "    ");
 	  if (m_menu < MMENU_MAX) m_menu++; else m_menu = 0;
@@ -429,6 +436,7 @@ void run_set_1(unsigned char event)
     case EVENT_TIMER_SECOND:
 	  blink = !blink;
 	  if (wait_menu > 0) wait_menu--; else {
+	    KBD_set_type(1);
         MAX7219_clearDisplay();
         SET_STATE(run_menu);
 	    show_menu();
@@ -438,9 +446,9 @@ void run_set_1(unsigned char event)
 	  blink05 = !blink05;
 	  show_set_temp(0);
     break;
-    case EVENT_KEY_PLUS:
+    case EVENT_KEY_MINUS:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
+	  blink05 = 1;
 	  if (n_edit == 0) {
         if (temps[0][0] > -550) {
 		  temps[0][0]--;
@@ -458,13 +466,12 @@ void run_set_1(unsigned char event)
     break;
     case EVENT_KEY_SET:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
       MAX7219_clearDisplay();
-	  if (n_edit < 2) n_edit++; else n_edit = 0;
+	  if (n_edit < 2) n_edit++; else RTOS_setTask(EVENT_EXIT_MENU, 0, 0); 
+	  if (n_edit == 2) KBD_set_type(1); else KBD_set_type(0);
 	  show_set_temp(0);
     break;
-    case EVENT_KEY_SET_LONG:
-	  BEEPER_TICK();
+    case EVENT_EXIT_MENU:
       wait_menu = WAIT_MENU_TIME;
 	  if (temps[0][0] > temps[0][1]) {
         MAX7219_clearDisplay();
@@ -473,6 +480,7 @@ void run_set_1(unsigned char event)
         save_min_temp_1(temps[0][1]);
 	    save_type_1(types[0]);
         show_menu();
+	    KBD_set_type(1);
 	  } else {
         MAX7219_clearDisplay();
         SET_STATE(run_error);
@@ -480,9 +488,9 @@ void run_set_1(unsigned char event)
         RTOS_setTask(EVENT_TIMER_SECOND05, 0, 500); 
 	  }
     break;
-    case EVENT_KEY_MINUS:
+    case EVENT_KEY_PLUS:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
+	  blink05 = 1;
 	  if (n_edit == 0) {
         if (temps[0][0] < 790) {
 		  temps[0][0]++;
@@ -510,6 +518,7 @@ void run_set_2(unsigned char event)
     case EVENT_TIMER_SECOND:
 	  blink = !blink;
 	  if (wait_menu > 0) wait_menu--; else {
+	    KBD_set_type(1);
         MAX7219_clearDisplay();
         SET_STATE(run_menu);
 	    show_menu();
@@ -519,9 +528,9 @@ void run_set_2(unsigned char event)
 	  blink05 = !blink05;
 	  show_set_temp(1);
     break;
-    case EVENT_KEY_PLUS:
+    case EVENT_KEY_MINUS:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
+	  blink05 = 1;
 	  if (n_edit == 0) {
         if (temps[1][0] > -550) {
 		  temps[1][0]--;
@@ -539,13 +548,12 @@ void run_set_2(unsigned char event)
     break;
     case EVENT_KEY_SET:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
       MAX7219_clearDisplay();
-	  if (n_edit < 2) n_edit++; else n_edit = 0;
+	  if (n_edit < 2) n_edit++; else RTOS_setTask(EVENT_EXIT_MENU, 0, 0); 
+	  if (n_edit == 2) KBD_set_type(1); else KBD_set_type(0);
 	  show_set_temp(1);
     break;
-    case EVENT_KEY_SET_LONG:
-	  BEEPER_TICK();
+    case EVENT_EXIT_MENU:
       wait_menu = WAIT_MENU_TIME;
 	  if (temps[1][0] > temps[1][1]) {
         MAX7219_clearDisplay();
@@ -554,6 +562,7 @@ void run_set_2(unsigned char event)
         save_min_temp_2(temps[1][1]);
 	    save_type_2(types[1]);
         show_menu();
+	    KBD_set_type(1);
 	  } else {
         MAX7219_clearDisplay();
         SET_STATE(run_error);
@@ -561,9 +570,9 @@ void run_set_2(unsigned char event)
         RTOS_setTask(EVENT_TIMER_SECOND05, 0, 500); 
 	  }
     break;
-    case EVENT_KEY_MINUS:
+    case EVENT_KEY_PLUS:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
+	  blink05 = 1;
 	  if (n_edit == 0) {
         if (temps[1][0] < 790) {
 		  temps[1][0]++;
@@ -635,26 +644,22 @@ void run_set_brightnes(unsigned char event)
         MAX7219_printStr(4, "   ");
 	  }
     break;
-    case EVENT_KEY_PLUS:
+    case EVENT_KEY_MINUS:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
 	  if (brightnes > 0) {
 	    brightnes--;
 	    MAX7219_SendCmd(MAX7219_INTENSITY, brightnes);
       }
     break;
     case EVENT_KEY_SET:
-    case EVENT_KEY_SET_LONG:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
 	  save_brightnes(brightnes);
       MAX7219_clearDisplay();
       SET_STATE(run_menu);
       show_menu();
     break;
-    case EVENT_KEY_MINUS:
+    case EVENT_KEY_PLUS:
       wait_menu = WAIT_MENU_TIME;
-	  BEEPER_TICK();
 	  if (brightnes < 15) {
 	    brightnes++;
 	    MAX7219_SendCmd(MAX7219_INTENSITY, brightnes);
@@ -681,15 +686,14 @@ void run_error(unsigned char event)
     case EVENT_TIMER_SECOND05:
 	  blink05 = !blink05;
 	  if (blink05) {
-        MAX7219_printStr(5, "Err ");
+        MAX7219_printStr(1, "Err ");
 	  } else {
-        MAX7219_printStr(5, "    ");
+        MAX7219_printStr(1, "    ");
 	  }
     break;
     case EVENT_KEY_SET:
     case EVENT_KEY_MINUS:
     case EVENT_KEY_PLUS:
-	  BEEPER_TICK();
       wait_menu = WAIT_MENU_TIME;
       SET_STATE(run_menu);
       MAX7219_clearDisplay();

@@ -22,10 +22,10 @@ int main(void)
   OUT_2_init();
   BEEPER_init();
   RTOS_init();
-  RTOS_setTask(EVENT_TIMER_SECOND, 0, 1000); // запускаем секундный таймер,
+  RTOS_setTask(EVENT_TIMER_SECOND, 0, 1000);  // запускаем секундный таймер,
   RTOS_setTask(EVENT_TIMER_SECOND05, 0, 500); // запускаем секундный таймер,
-  RTOS_setTask(EVENT_KEY_POLL, 0, 5);        // запускаем сканирование клавиатуры
-  RTOS_setTask(EVENT_SEARCH_SENSOR, 0, 0);   // запускаем сканирование сенсоров
+  RTOS_setTask(EVENT_KEY_POLL, 0, 10);        // запускаем сканирование клавиатуры
+  RTOS_setTask(EVENT_SEARCH_SENSOR, 0, 0);    // запускаем сканирование сенсоров
   load_max_temp_1();
   load_max_temp_2();
   load_min_temp_1();
