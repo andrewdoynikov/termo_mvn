@@ -171,16 +171,13 @@ void run_main(unsigned char event)
 		  } else {
 	        MAX7219_printChar(1, 'F');
 		  }
-          check_temp(chanel);
 		} else {
 	      MAX7219_printChar(1, ' ');
           MAX7219_setCommaPos(1, 0);
 		}
         MAX7219_setCommaPos(7, 1);
         MAX7219_setCommaPos(4, one_sensor_flag);
-	  } else {
-		if (chanel == 1) { OUT_1_0(); }
-		if (chanel == 2) { OUT_2_0(); }
+        check_temp(chanel);
 	  }
       if (!one_sensor_flag) {
         if (chanel < 4) {
