@@ -261,7 +261,8 @@ void run_menu(unsigned char event)
 	  chanel = 1;
 	  if (ds18x20GetTemp(1) < temps[0][0]) status[0] = T_OTSLED_MAX; else status[0] = T_OTSLED_MIN;
 	  if (ds18x20GetTemp(2) < temps[1][0]) status[1] = T_OTSLED_MAX; else status[1] = T_OTSLED_MIN;
-      check_temp(chanel);
+      check_temp(1);
+      check_temp(2);
       SET_STATE(run_main);
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, SHOW_TIME); 
     break;
@@ -317,24 +318,12 @@ void DS18x20_scan(void)
 	  ds_state = 2;
     break;
     case 2:
-      if (ds18x20GetDevCount(1) == 1) {
-	    ds18x20GetTemp(1);
-        check_temp(1);
-	  } else {
-        set_outport(1, 0);;
-	  }
-      if (ds18x20GetDevCount(2) == 1) {
-        ds18x20GetTemp(2);
-        check_temp(2);
-	  } else {
-        set_outport(2, 0);;
-	  }
-      if (ds18x20GetDevCount(3) == 1) {
-        ds18x20GetTemp(3);
-	  }
-      if (ds18x20GetDevCount(4) == 1) {
-        ds18x20GetTemp(4);
-	  }
+      ds18x20GetTemp(1);
+      check_temp(1);
+      ds18x20GetTemp(2);
+      check_temp(2);
+      ds18x20GetTemp(3);
+      ds18x20GetTemp(4);
 	  dscount = SCAN_TIME / 100;
 	  ds_state = 0;
     break;
