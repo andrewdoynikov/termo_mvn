@@ -35,6 +35,7 @@ uint8_t brightnes = 2;
 int16_t temps[2][2] = { {0, 0}, {0, 0} };
 uint8_t types[2] = {1, 1};
 uint8_t status[2] = {T_OTSLED_MAX, T_OTSLED_MAX};
+uint8_t outs[2] = {0, 0};
 uint8_t m_menu = MM_D1, n_edit = 0;
 //=============================================================================
 #define SET_STATE(a) pState = a // макрос для смены состояния
@@ -85,9 +86,20 @@ void run_start(unsigned char event)
       RTOS_setTask(EVENT_RUN_MAIN, 100, 0);
     break;
     case EVENT_RUN_MAIN:
-	  if (ds18x20GetTemp(1) < temps[0][0]) status[0] = T_OTSLED_MAX; else status[0] = T_OTSLED_MIN;
-	  if (ds18x20GetTemp(2) < temps[1][0]) status[1] = T_OTSLED_MAX; else status[1] = T_OTSLED_MIN;
-      check_temp(chanel);
+	  if (ds18x20GetTemp(1) < temps[0][0]) {
+	    status[0] = T_OTSLED_MAX;
+		if (types[0] == T_HEATER) set_outport(1, 1); else set_outport(1, 0);
+	  } else {
+	    status[0] = T_OTSLED_MIN;
+		if (types[0] == T_HEATER) set_outport(1, 0); else set_outport(1, 1);
+	  }
+	  if (ds18x20GetTemp(2) < temps[1][0]) {
+	    status[1] = T_OTSLED_MAX;
+		if (types[1] == T_HEATER) set_outport(2, 1); else set_outport(2, 0);
+	  } else {
+	    status[1] = T_OTSLED_MIN;
+		if (types[1] == T_HEATER) set_outport(2, 0); else set_outport(2, 1);
+	  }
       MAX7219_clearDisplay();
       RTOS_setTask(EVENT_SCAN_SENSOR, 0, 100); 
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
@@ -99,35 +111,39 @@ void run_start(unsigned char event)
   }    
 }
 //=============================================================================
+void set_outport(uint8_t chanel, uint8_t val)
+{
+  if (chanel == 1) {
+    if (val == 1) {
+	  OUT_1_1();
+	  outs[0] = 1;
+	} else {
+	  OUT_1_0();
+	  outs[0] = 0;
+	}
+  }
+  if (chanel == 2) {
+    if (val == 1) {
+	  OUT_2_1();
+	  outs[1] = 1;
+	} else {
+	  OUT_2_0();
+	  outs[1] = 0;
+	}
+  }
+}
+//=============================================================================
 void check_temp(uint8_t chanel)
 {
-  if (ds18x20GetDevCount(chanel) == 0) {
-    if (chanel == 1) OUT_1_0();
-    if (chanel == 2) OUT_2_0();
-  }
   int16_t t = ds18x20GetTemp(chanel);
   if (status[chanel - 1] == T_OTSLED_MAX) {
  // отслеживаем превышение максимума
     if (t > temps[chanel - 1][T_MAX]) {
       status[chanel - 1] = T_OTSLED_MIN;
       if (types[chanel - 1] == T_HEATER) {
-        if (chanel == 1) OUT_1_0();
-        if (chanel == 2) OUT_2_0();
-        MAX7219_setCommaPos(1, 0);
+        set_outport(chanel, 0);
 	  } else {
-        if (chanel == 1) OUT_1_1();
-        if (chanel == 2) OUT_2_1();
-        MAX7219_setCommaPos(1, 1);
-	  }
-    } else {
-      if (types[chanel - 1] == T_HEATER) {
-        if (chanel == 1) OUT_1_1();
-        if (chanel == 2) OUT_2_1();
-        MAX7219_setCommaPos(1, 1);
-	  } else {
-        if (chanel == 1) OUT_1_0();
-        if (chanel == 2) OUT_2_0();
-        MAX7219_setCommaPos(1, 0);
+        set_outport(chanel, 1);
 	  }
     }
   } else {
@@ -135,23 +151,9 @@ void check_temp(uint8_t chanel)
     if (t < temps[chanel - 1][T_MIN]) {
       status[chanel - 1] = T_OTSLED_MAX;
       if (types[chanel - 1] == T_HEATER) {
-        if (chanel == 1) OUT_1_1();
-        if (chanel == 2) OUT_2_1();
-        MAX7219_setCommaPos(1, 1);
+        set_outport(chanel, 1);
 	  } else {
-        if (chanel == 1) OUT_1_0();
-        if (chanel == 2) OUT_2_0();
-        MAX7219_setCommaPos(1, 0);
-	  }
-    } else {
-      if (types[chanel - 1] == T_HEATER) {
-        if (chanel == 1) OUT_1_0();
-        if (chanel == 2) OUT_2_0();
-        MAX7219_setCommaPos(1, 0);
-	  } else {
-        if (chanel == 1) OUT_1_1();
-        if (chanel == 2) OUT_2_1();
-        MAX7219_setCommaPos(1, 1);
+        set_outport(chanel, 0);
 	  }
     }
   }
@@ -171,13 +173,13 @@ void run_main(unsigned char event)
 		  } else {
 	        MAX7219_printChar(1, 'F');
 		  }
+          MAX7219_setCommaPos(1, outs[chanel - 1]);
 		} else {
 	      MAX7219_printChar(1, ' ');
           MAX7219_setCommaPos(1, 0);
 		}
         MAX7219_setCommaPos(7, 1);
         MAX7219_setCommaPos(4, one_sensor_flag);
-        check_temp(chanel);
 	  }
       if (!one_sensor_flag) {
         if (chanel < 4) {
@@ -202,6 +204,7 @@ void run_main(unsigned char event)
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
     break;
     case EVENT_KEY_SET:
+	  m_menu = MM_D1;
 	  n_edit = 0;
       MAX7219_clearDisplay();
       SET_STATE(run_menu);
@@ -314,10 +317,24 @@ void DS18x20_scan(void)
 	  ds_state = 2;
     break;
     case 2:
-      ds18x20GetTemp(1);
-      ds18x20GetTemp(2);
-      ds18x20GetTemp(3);
-      ds18x20GetTemp(4);
+      if (ds18x20GetDevCount(1) == 1) {
+	    ds18x20GetTemp(1);
+        check_temp(1);
+	  } else {
+        set_outport(1, 0);;
+	  }
+      if (ds18x20GetDevCount(2) == 1) {
+        ds18x20GetTemp(2);
+        check_temp(2);
+	  } else {
+        set_outport(2, 0);;
+	  }
+      if (ds18x20GetDevCount(3) == 1) {
+        ds18x20GetTemp(3);
+	  }
+      if (ds18x20GetDevCount(4) == 1) {
+        ds18x20GetTemp(4);
+	  }
 	  dscount = SCAN_TIME / 100;
 	  ds_state = 0;
     break;
