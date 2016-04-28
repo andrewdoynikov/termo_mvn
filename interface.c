@@ -231,6 +231,7 @@ void run_menu(unsigned char event)
     case EVENT_TIMER_SECOND:
 	  blink = !blink;
 	  if (wait_menu > 0) wait_menu--; else {
+        BEEPER_TICK(); 
         RTOS_setTask(EVENT_EXIT_MENU, 0, 0); 
 	  }
 	  if (m_menu == MM_BRIGHTNES) {
@@ -459,6 +460,7 @@ void run_set_1(unsigned char event)
     case EVENT_TIMER_SECOND:
 	  blink = !blink;
 	  if (wait_menu > 0) wait_menu--; else {
+        BEEPER_TICK(); 
 	    KBD_set_type(1);
         MAX7219_clearDisplay();
         SET_STATE(run_menu);
@@ -541,6 +543,7 @@ void run_set_2(unsigned char event)
     case EVENT_TIMER_SECOND:
 	  blink = !blink;
 	  if (wait_menu > 0) wait_menu--; else {
+        BEEPER_TICK(); 
 	    KBD_set_type(1);
         MAX7219_clearDisplay();
         SET_STATE(run_menu);

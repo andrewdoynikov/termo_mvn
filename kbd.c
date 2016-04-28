@@ -54,11 +54,17 @@ void KBD_scan(void)
   if (kbd_type == 1) {
     if (debounce_sw_plus() == 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_PLUS, 0, 0); }
     if (debounce_sw_minus() == 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_MINUS, 0, 0); }
+    RTOS_setTask(EVENT_KEY_POLL, 10, 0);         // запускаем сканирование клавиатуры
   } else {
     if (debounce_sw_plus() >= 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_PLUS, 0, 0); }
     if (debounce_sw_minus() >= 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_MINUS, 0, 0); }
+    RTOS_setTask(EVENT_KEY_POLL, 50, 0);         // запускаем сканирование клавиатуры
   }
-  if (debounce_sw_set() == 1) { BEEPER_TICK(); RTOS_setTask(EVENT_KEY_SET, 0, 0); }
+  if (debounce_sw_set() == 1) { 
+    BEEPER_TICK(); 
+	RTOS_setTask(EVENT_KEY_SET, 0, 0); 
+    RTOS_setTask(EVENT_KEY_POLL, 10, 0);         // запускаем сканирование клавиатуры
+  }
 }
 //=============================================================================
  
