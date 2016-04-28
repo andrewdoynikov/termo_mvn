@@ -136,7 +136,7 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x19ae
+.text           0x00000000     0x1a02
  *(.vectors)
  .vectors       0x00000000       0x68 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm328p.o
                 0x00000000                __vector_default
@@ -219,110 +219,110 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
                 0x000000a2                __vector_20
  .text          0x000000a6       0x7c termo_mvn.o
                 0x000000a6                main
- .text          0x00000122      0xde4 interface.o
+ .text          0x00000122      0xe38 interface.o
                 0x00000122                print_temperature
                 0x0000015e                set_outport
                 0x0000018e                check_temp
                 0x0000020e                DS18x20_scan
-                0x000002a8                events_default
-                0x000002d2                run_start
-                0x000004f2                save_max_temp_1
-                0x000004fe                save_max_temp_2
-                0x0000050a                save_min_temp_1
-                0x00000516                save_min_temp_2
-                0x00000522                load_max_temp_1
-                0x00000534                load_min_temp_1
-                0x00000546                load_max_temp_2
-                0x00000558                load_min_temp_2
-                0x0000056a                save_brightnes
-                0x00000576                load_brightnes
-                0x00000592                save_type_1
-                0x0000059e                load_type1
-                0x000005b0                save_type_2
-                0x000005bc                load_type2
-                0x000005ce                show_menu
-                0x000005e8                run_error
-                0x00000686                run_set_brightnes
-                0x00000760                run_menu
-                0x00000900                run_main
-                0x00000a46                show_set_temp
-                0x00000b4a                run_set_2
-                0x00000d28                run_set_1
- .text          0x00000f06      0x18c kbd.o
-                0x00000f06                KBD_init
-                0x00000f1a                KBD_set_type
-                0x00000f20                debounce_sw_plus
-                0x00000f62                debounce_sw_set
-                0x00000fa4                debounce_sw_minus
-                0x00000fe6                KBD_scan
- .text          0x00001092      0x252 rtos.o
-                0x00001092                RTOS_init
-                0x000010b6                RTOS_setTask
-                0x0000119c                RTOS_deleteTask
-                0x00001206                RTOS_dispatchTask
-                0x000012c0                __vector_9
- .text          0x000012e4      0x278 max7219.o
-                0x000012e4                MAX7219_lookupCode
-                0x000012fa                MAX7219_SendByte
-                0x00001318                MAX7219_SendCmd
-                0x00001340                MAX7219_updateDisplay
-                0x00001370                MAX7219_clearDisplay
-                0x00001396                MAX7219_Init
-                0x000013d0                MAX7219_printNum
-                0x000014d8                MAX7219_printChar
-                0x000014f8                MAX7219_printStr
-                0x0000153a                MAX7219_setCommaPos
- .text          0x0000155c      0x39e ds18x20.o
-                0x0000155c                ds18x20IsOnBus
-                0x00001636                ds18x20SendByte
-                0x000016fc                ds18x20GetByte
-                0x000017a4                ds18x20ReadStratchPad
-                0x00001824                ds18x20ConvertTemp
-                0x00001872                ds18x20GetTemp
-                0x000018e2                ds18x20GetDevCount
-                0x000018ee                ds18x20SetDevCount
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
- .text          0x000018fa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
-                0x000018fa                . = ALIGN (0x2)
+                0x000002e4                events_default
+                0x0000030e                run_start
+                0x00000546                save_max_temp_1
+                0x00000552                save_max_temp_2
+                0x0000055e                save_min_temp_1
+                0x0000056a                save_min_temp_2
+                0x00000576                load_max_temp_1
+                0x00000588                load_min_temp_1
+                0x0000059a                load_max_temp_2
+                0x000005ac                load_min_temp_2
+                0x000005be                save_brightnes
+                0x000005ca                load_brightnes
+                0x000005e6                save_type_1
+                0x000005f2                load_type1
+                0x00000604                save_type_2
+                0x00000610                load_type2
+                0x00000622                show_menu
+                0x0000063c                run_error
+                0x000006da                run_set_brightnes
+                0x000007b4                run_menu
+                0x00000954                run_main
+                0x00000a9a                show_set_temp
+                0x00000b9e                run_set_2
+                0x00000d7c                run_set_1
+ .text          0x00000f5a      0x18c kbd.o
+                0x00000f5a                KBD_init
+                0x00000f6e                KBD_set_type
+                0x00000f74                debounce_sw_plus
+                0x00000fb6                debounce_sw_set
+                0x00000ff8                debounce_sw_minus
+                0x0000103a                KBD_scan
+ .text          0x000010e6      0x252 rtos.o
+                0x000010e6                RTOS_init
+                0x0000110a                RTOS_setTask
+                0x000011f0                RTOS_deleteTask
+                0x0000125a                RTOS_dispatchTask
+                0x00001314                __vector_9
+ .text          0x00001338      0x278 max7219.o
+                0x00001338                MAX7219_lookupCode
+                0x0000134e                MAX7219_SendByte
+                0x0000136c                MAX7219_SendCmd
+                0x00001394                MAX7219_updateDisplay
+                0x000013c4                MAX7219_clearDisplay
+                0x000013ea                MAX7219_Init
+                0x00001424                MAX7219_printNum
+                0x0000152c                MAX7219_printChar
+                0x0000154c                MAX7219_printStr
+                0x0000158e                MAX7219_setCommaPos
+ .text          0x000015b0      0x39e ds18x20.o
+                0x000015b0                ds18x20IsOnBus
+                0x0000168a                ds18x20SendByte
+                0x00001750                ds18x20GetByte
+                0x000017f8                ds18x20ReadStratchPad
+                0x00001878                ds18x20ConvertTemp
+                0x000018c6                ds18x20GetTemp
+                0x00001936                ds18x20GetDevCount
+                0x00001942                ds18x20SetDevCount
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
+ .text          0x0000194e        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
+                0x0000194e                . = ALIGN (0x2)
  *(.text.*)
- .text.libgcc   0x000018fa       0x26 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
-                0x000018fa                _div
-                0x000018fa                __divmodhi4
- .text.libgcc   0x00001920        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
- .text.libgcc   0x00001920        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
- .text.libgcc   0x00001920        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
- .text.libgcc   0x00001920       0x28 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
-                0x00001920                __udivmodhi4
+ .text.libgcc   0x0000194e       0x26 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_divmodhi4.o)
+                0x0000194e                _div
+                0x0000194e                __divmodhi4
+ .text.libgcc   0x00001974        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x00001974        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_copy_data.o)
+ .text.libgcc   0x00001974        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00001974       0x28 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_udivmodhi4.o)
+                0x00001974                __udivmodhi4
  .text.avr-libc
-                0x00001948       0x10 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
-                0x00001948                __eerd_byte_m328p
+                0x0000199c       0x10 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_byte_atmega328p.o)
+                0x0000199c                __eerd_byte_m328p
  .text.avr-libc
-                0x00001958        0xc c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
-                0x00001958                __eerd_word_m328p
+                0x000019ac        0xc c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_word_atmega328p.o)
+                0x000019ac                __eerd_word_m328p
  .text.avr-libc
-                0x00001964       0x1c c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
-                0x00001964                __eewr_byte_m328p
-                0x00001966                __eewr_r18_m328p
+                0x000019b8       0x1c c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_byte_atmega328p.o)
+                0x000019b8                __eewr_byte_m328p
+                0x000019ba                __eewr_r18_m328p
  .text.avr-libc
-                0x00001980        0xa c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
-                0x00001980                __eewr_word_m328p
+                0x000019d4        0xa c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eewr_word_atmega328p.o)
+                0x000019d4                __eewr_word_m328p
  .text.avr-libc
-                0x0000198a       0x20 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
-                0x0000198a                __eerd_block_m328p
-                0x0000198e                __eerd_blraw_m328p
-                0x000019aa                . = ALIGN (0x2)
+                0x000019de       0x20 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5\libc.a(eerd_block_atmega328p.o)
+                0x000019de                __eerd_block_m328p
+                0x000019e2                __eerd_blraw_m328p
+                0x000019fe                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000019aa        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
-                0x000019aa                _exit
-                0x000019aa                exit
+ .fini9         0x000019fe        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+                0x000019fe                _exit
+                0x000019fe                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -341,11 +341,11 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000019aa        0x4 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
+ .fini0         0x000019fe        0x4 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000019ae                _etext = .
+                0x00001a02                _etext = .
 
-.data           0x00800100       0xa6 load address 0x000019ae
+.data           0x00800100       0xa6 load address 0x00001a02
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x0 c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5.1/../../../../avr/lib/avr5/crtm328p.o
@@ -417,8 +417,8 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
  *(.bss*)
  *(COMMON)
                 0x00800253                PROVIDE (__bss_end, .)
-                0x000019ae                __data_load_start = LOADADDR (.data)
-                0x00001a54                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00001a02                __data_load_start = LOADADDR (.data)
+                0x00001aa8                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800253        0x0
                 0x00800253                PROVIDE (__noinit_start, .)
@@ -538,14 +538,14 @@ LOAD c:/program files (x86)/atmel/avr tools/avr toolchain/bin/../lib/gcc/avr/4.5
  .debug_abbrev  0x00000484      0x104 max7219.o
  .debug_abbrev  0x00000588      0x24c ds18x20.o
 
-.debug_line     0x00000000     0x20d2
+.debug_line     0x00000000     0x211d
  *(.debug_line)
  .debug_line    0x00000000      0x162 termo_mvn.o
- .debug_line    0x00000162      0xec4 interface.o
- .debug_line    0x00001026      0x301 kbd.o
- .debug_line    0x00001327      0x2c9 rtos.o
- .debug_line    0x000015f0      0x3a2 max7219.o
- .debug_line    0x00001992      0x740 ds18x20.o
+ .debug_line    0x00000162      0xf0f interface.o
+ .debug_line    0x00001071      0x301 kbd.o
+ .debug_line    0x00001372      0x2c9 rtos.o
+ .debug_line    0x0000163b      0x3a2 max7219.o
+ .debug_line    0x000019dd      0x740 ds18x20.o
 
 .debug_frame    0x00000000      0x400
  *(.debug_frame)

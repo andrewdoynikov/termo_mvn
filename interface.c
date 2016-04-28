@@ -86,6 +86,7 @@ void run_start(unsigned char event)
       RTOS_setTask(EVENT_RUN_MAIN, 100, 0);
     break;
     case EVENT_RUN_MAIN:
+	if (ds18x20GetDevCount(1) == 1) {
 	  if (ds18x20GetTemp(1) < temps[0][0]) {
 	    status[0] = T_OTSLED_MAX;
 		if (types[0] == T_HEATER) set_outport(1, 1); else set_outport(1, 0);
@@ -93,6 +94,10 @@ void run_start(unsigned char event)
 	    status[0] = T_OTSLED_MIN;
 		if (types[0] == T_HEATER) set_outport(1, 0); else set_outport(1, 1);
 	  }
+    } else {
+      set_outport(1, 0);
+	}
+	if (ds18x20GetDevCount(2) == 1) {
 	  if (ds18x20GetTemp(2) < temps[1][0]) {
 	    status[1] = T_OTSLED_MAX;
 		if (types[1] == T_HEATER) set_outport(2, 1); else set_outport(2, 0);
@@ -100,6 +105,9 @@ void run_start(unsigned char event)
 	    status[1] = T_OTSLED_MIN;
 		if (types[1] == T_HEATER) set_outport(2, 0); else set_outport(2, 1);
 	  }
+    } else {
+      set_outport(2, 0);
+	}
       MAX7219_clearDisplay();
       RTOS_setTask(EVENT_SCAN_SENSOR, 0, 100); 
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
@@ -318,12 +326,24 @@ void DS18x20_scan(void)
 	  ds_state = 2;
     break;
     case 2:
+	if (ds18x20GetDevCount(1) == 1) {
       ds18x20GetTemp(1);
       check_temp(1);
+    } else {
+      set_outport(1, 0);
+    }
+	if (ds18x20GetDevCount(2) == 1) {
       ds18x20GetTemp(2);
       check_temp(2);
+    } else {
+      set_outport(2, 0);
+    }
+	if (ds18x20GetDevCount(3) == 1) {
       ds18x20GetTemp(3);
+    }
+	if (ds18x20GetDevCount(4) == 1) {
       ds18x20GetTemp(4);
+    }
 	  dscount = SCAN_TIME / 100;
 	  ds_state = 0;
     break;
