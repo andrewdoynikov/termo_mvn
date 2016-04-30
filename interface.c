@@ -207,7 +207,7 @@ void run_main(unsigned char event)
 	  RTOS_deleteTask(EVENT_SHOW_SENSOR);
       one_sensor_flag = !one_sensor_flag;
 	  if (one_sensor_flag) {
-	    if (chanel > 1) chanel--; else chanel = 4;
+	    if (chanel > 1) chanel--; else chanel = ds_count;
 	  }
       RTOS_setTask(EVENT_SHOW_SENSOR, 0, 0); 
     break;
